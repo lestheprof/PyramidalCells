@@ -33,8 +33,8 @@ public class RunSingleNeuron {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		double [][] contextArray ;
-		double [][] drivingArray ;
+		double [][] contextArray = null ;
+		double [][] drivingArray = null ;
 
 		int argno = 0 ;
 		while (argno < args.length)
@@ -58,7 +58,12 @@ public class RunSingleNeuron {
 			}
 		
 		// set up the neuron,
-		PyramidalNeuron neuron = new PyramidalNeuron("SingleNeuron") ;
+		PyramidalNeuron neuron = new PyramidalNeuron("SingleNeuron", samplingRate) ;
+		// set up the synapses on this neuron
+		
+		neuron.setUpExternalContextSynapses(contextArray.length);
+		neuron.setUpExternalDrivingSynapses(drivingArray.length);
+		
 
 	}
 	
