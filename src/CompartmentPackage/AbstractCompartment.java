@@ -16,5 +16,11 @@ public abstract class AbstractCompartment {
 	public String getNeuronID(){
 		return myNeuron.neuronID ;
 	}
+	
+	/*
+	 * CurrentTime current simulation time
+	 */
+	public void run(double currentTime){
+	}
 
 }

@@ -3,6 +3,7 @@ package NeuronPackage;
 import CompartmentPackage.*;
 import SynapsePackage.ExternalSynapse;
 import SynapsePackage.SynapseForm;
+import java.util.List;
 
 
 public class PyramidalNeuron extends AbstractNeuron {
@@ -14,6 +15,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 	private ExternalSynapse[] extDrivingSynapses ;
 	private ExternalSynapse[] extContextSynapses ;
 	private int samplingRate ;
+	public List<Double> spikesOut = null ;
 	
 	/*
 	 * ID String identity of the neuron
@@ -54,10 +56,19 @@ public class PyramidalNeuron extends AbstractNeuron {
 		// set these up in this neuron's ApicalDendrite
 		for (int i=0; i<nExtContextSynapses; i++) {
 			// create the synapse
-			extDrivingSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.apicalDendrite) ;
+			extContextSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.apicalDendrite) ;
 			// initialise the synapse
 		}
 		
 	}
 
+	public void run(double currentTime){
+		// run neuron for a single time step
+		basalDendrite.run(currentTime); // update state of basal dendrite
+		apicalTuft.run(currentTime); // update state of  apical dendrite
+		apicalDendrite.run(currentTime); // use the above two to nonlinearly mix
+		// what's below won't work: needs the code of the runs above to be instantited
+		if (axonHillock.runAndSpike(currentTime))	// attempt to generate output spikes
+			spikesOut.add(currentTime) ;
+	}
 }

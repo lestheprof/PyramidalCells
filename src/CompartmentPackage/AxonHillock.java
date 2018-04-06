@@ -18,5 +18,14 @@ public class AxonHillock extends AbstractCompartment {
 		super(neuron) ;
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * @param currentTime simulation time
+	 * @return currently always false
+	 */
+	public Boolean runAndSpike(double currentTime){
+		this.run(currentTime);
+		return false ;
+	}
 
 }

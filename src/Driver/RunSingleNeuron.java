@@ -27,6 +27,7 @@ public class RunSingleNeuron {
 	 * 
 	 */
 	static int samplingRate = 10000 ;
+	static double endTime = 5.0 ;
 
 	/**
 	 * @param args: -f filename for source of external spikes
@@ -35,6 +36,8 @@ public class RunSingleNeuron {
 	public static void main(String[] args) throws IOException {
 		double [][] contextArray = null ;
 		double [][] drivingArray = null ;
+		double currentTime ; // now
+		double deltaTime ; // interval between samples
 
 		int argno = 0 ;
 		while (argno < args.length)
@@ -51,6 +54,10 @@ public class RunSingleNeuron {
 				samplingRate = Integer.parseInt(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
+			case "-t": // followed by end time (defaults to 5.0)
+				endTime = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -64,7 +71,16 @@ public class RunSingleNeuron {
 		neuron.setUpExternalContextSynapses(contextArray.length);
 		neuron.setUpExternalDrivingSynapses(drivingArray.length);
 		
-
+		// simulation loop
+		currentTime = 0 ; // start at 0
+		deltaTime = 1.0/samplingRate ; // time increment (sample interval)
+		while (currentTime < endTime){
+			// run neuron 1 time step
+			neuron.run(currentTime);
+			currentTime = currentTime + deltaTime ;
+		}
+		System.out.println("Simulation ended");
+		
 	}
 	
 	private static double[][] readInputsToArrayFromFile(String filename )  throws IOException, NumberFormatException
