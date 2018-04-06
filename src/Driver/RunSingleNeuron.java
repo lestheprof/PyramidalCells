@@ -26,7 +26,7 @@ public class RunSingleNeuron {
 	/**
 	 * 
 	 */
-
+	static int samplingRate = 10000 ;
 
 	/**
 	 * @param args: -f filename for source of external spikes
@@ -35,6 +35,7 @@ public class RunSingleNeuron {
 	public static void main(String[] args) throws IOException {
 		double [][] contextArray ;
 		double [][] drivingArray ;
+
 		int argno = 0 ;
 		while (argno < args.length)
 			switch(args[argno]){
@@ -46,6 +47,10 @@ public class RunSingleNeuron {
 				drivingArray = readInputsToArrayFromFile(args[argno + 1]);	
 				argno = argno + 2 ;
 				break;
+			case "-s": // followed by sampling rate (defaults to 10000)
+				samplingRate = Integer.parseInt(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -57,7 +62,7 @@ public class RunSingleNeuron {
 
 	}
 	
-	private static double[][] readInputsToArrayFromFile(String filename )  throws IOException
+	private static double[][] readInputsToArrayFromFile(String filename )  throws IOException, NumberFormatException
 	/*
 	 * Reads the input in to a 2D
 	 * array where the array is N by 2, with each row being input
@@ -83,7 +88,14 @@ public class RunSingleNeuron {
 			String nextInput = inputIterator.next().trim();
 			String[] inputComponents = nextInput.split("\\s+", 2);
 			for (int i = 0; i < 2; i++) {
+				try{
 				inputArray[lineNo][i] = Double.parseDouble(inputComponents[i]);
+				} catch (NumberFormatException e)
+				{
+					System.err.println("readInputsToArrayFromFile: Caught NumberFormatException: " + e.getMessage());
+					System.exit(1);
+				}
+				
 			}
 			lineNo = lineNo + 1;
 		}
