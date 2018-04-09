@@ -83,7 +83,7 @@ public class RunSingleNeuron {
 		
 		if (contextSynapseWeights != null)
 		{
-			neuron.setUpExternalContextSynapses(drivingSynapseWeights);
+			neuron.setUpExternalContextSynapses(contextSynapseWeights);
 		}
 		else {
 			System.err.println("main: No context synapse file. Exiting. BooHooHoo");
