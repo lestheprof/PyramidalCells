@@ -62,9 +62,13 @@ public class RunSingleNeuron {
 				argno = argno + 2 ;
 				break ;
 			case "-wd": // followed by weight file for driving inputs
+				// for now, we assume that the compartment number for these driving  weights is 1.
+				drivingSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break ;
 			case "-wc": // followed by weight file for contextual inputs
+				// for now, we assume that the compartment number for these contextual weights is 2.
+				contextSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break  ;
 			default:
@@ -78,7 +82,16 @@ public class RunSingleNeuron {
 		// set up the synapses on this neuron
 		
 		neuron.setUpExternalContextSynapses(contextArray.length);
-		neuron.setUpExternalDrivingSynapses(drivingArray.length);
+		if (drivingSynapseWeights != null)
+		{
+			System.out.println("drivingSynapseWeights.length = " + drivingSynapseWeights.length);
+			neuron.setUpExternalDrivingSynapses(drivingSynapseWeights);
+		}
+		else {
+			System.err.println("main: No driving synapse file. Exiting. BooHoo");
+			System.exit(1);
+		}
+		
 		
 		// simulation loop
 		currentTime = 0 ; // start at 0

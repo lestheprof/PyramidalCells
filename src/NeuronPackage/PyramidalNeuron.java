@@ -34,15 +34,27 @@ public class PyramidalNeuron extends AbstractNeuron {
 	}
 	
 	/*
-	 * nExtDrivingSynapses synapses is the number of driving synapses (external for now)
+	 * extSynapticWeights is the array of external synaptic weights read from the file)
 	 */
-	public void setUpExternalDrivingSynapses(int nExtDrivingSynapses){
+	public void setUpExternalDrivingSynapses(double [][] extSynapticWeights){
+		// find the highest synapse number
+		int nExtDrivingSynapses = 0 ;
+		for (int index = 0 ; index < extSynapticWeights.length ; index++){
+			// use only synapses to this neuron
+			if (extSynapticWeights[index][2] == this.neuronID){
+			if (nExtDrivingSynapses < (int)(Math.round(extSynapticWeights[index][2])))
+				nExtDrivingSynapses = (int)(Math.round(extSynapticWeights[index][2])) ;
+			}	
+		}
 		// set up an array of external driving synapses
 		extDrivingSynapses = new ExternalSynapse[nExtDrivingSynapses] ; // note these are not initialised
 		// set these up in this neuron's BasalDendrite
-		for (int i=0; i<nExtDrivingSynapses; i++) {
+		for (int i=0; i<extSynapticWeights.length; i++) {
 			// create the synapse. Note that synapse id's start at 1
-			extDrivingSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.basalDendrite, i+1) ;
+			int synapseNumber = (int)(Math.round(extSynapticWeights[i][2])) ;
+			if (synapseNumber > 0)
+			extDrivingSynapses[synapseNumber] = 
+					new ExternalSynapse(extSynapticWeights[i][3], SynapseForm.EXCITATORY, this.basalDendrite, i+1) ;
 			// initialise the synapse
 		}
 	}
