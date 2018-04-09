@@ -81,10 +81,18 @@ public class RunSingleNeuron {
 		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate) ;
 		// set up the synapses on this neuron
 		
-		neuron.setUpExternalContextSynapses(contextArray.length);
+		if (contextSynapseWeights != null)
+		{
+			neuron.setUpExternalContextSynapses(drivingSynapseWeights);
+		}
+		else {
+			System.err.println("main: No context synapse file. Exiting. BooHooHoo");
+			System.exit(1);
+		}
+		
 		if (drivingSynapseWeights != null)
 		{
-			System.out.println("drivingSynapseWeights.length = " + drivingSynapseWeights.length);
+			// System.out.println("drivingSynapseWeights.length = " + drivingSynapseWeights.length);
 			neuron.setUpExternalDrivingSynapses(drivingSynapseWeights);
 		}
 		else {
