@@ -36,6 +36,9 @@ public class RunSingleNeuron {
 	public static void main(String[] args) throws IOException {
 		double [][] contextArray = null ;
 		double [][] drivingArray = null ;
+		double [][] contextSynapseWeights = null ;
+		double [][] drivingSynapseWeights = null ;
+		
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
 
@@ -43,11 +46,11 @@ public class RunSingleNeuron {
 		while (argno < args.length)
 			switch(args[argno]){
 			case "-c": // followed by input spike file name, so get file name for external contextual spike inputs
-				contextArray = readInputsToArrayFromFile(args[argno + 1]);
+				contextArray = readInputsToArrayFromFile(args[argno + 1], 2);
 				argno = argno + 2 ;
 				break;
 			case "-d": // followed by input spike file name, so get file name for external driving spike inputs
-				drivingArray = readInputsToArrayFromFile(args[argno + 1]);	
+				drivingArray = readInputsToArrayFromFile(args[argno + 1], 2);	
 				argno = argno + 2 ;
 				break;
 			case "-s": // followed by sampling rate (defaults to 10000)
@@ -58,14 +61,20 @@ public class RunSingleNeuron {
 				endTime = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
+			case "-wd": // followed by weight file for driving inputs
+				argno = argno + 2 ;
+				break ;
+			case "-wc": // followed by weight file for contextual inputs
+				argno = argno + 2 ;
+				break  ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
 				break ;
 			}
 		
-		// set up the neuron,
-		PyramidalNeuron neuron = new PyramidalNeuron("SingleNeuron", samplingRate) ;
+		// set up the neuron, with id = 1
+		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate) ;
 		// set up the synapses on this neuron
 		
 		neuron.setUpExternalContextSynapses(contextArray.length);
@@ -83,10 +92,15 @@ public class RunSingleNeuron {
 		
 	}
 	
-	private static double[][] readInputsToArrayFromFile(String filename )  throws IOException, NumberFormatException
+	/*
+	 * @param filename: name of file o be read
+	 * @param numPerLine number of doubles expected per line. 
+	 */
+	private static double[][] readInputsToArrayFromFile(String filename, int numPerLine )  
+			throws IOException, NumberFormatException
 	/*
 	 * Reads the input in to a 2D
-	 * array where the array is N by 2, with each row being input
+	 * array where the array is N by numPerLine, with each row being input
 	 * (neuron/channel) number, time (seconds)
 	 */
 	{
@@ -102,13 +116,13 @@ public class RunSingleNeuron {
 			System.exit(1); 
 		}
 
-		double[][] inputArray = new double[InputList.size()][2];
+		double[][] inputArray = new double[InputList.size()][numPerLine];
 		// now turn InputList into an array, line by line
 		Iterator<String> inputIterator = InputList.iterator();
 		while (inputIterator.hasNext()) {
 			String nextInput = inputIterator.next().trim();
-			String[] inputComponents = nextInput.split("\\s+", 2);
-			for (int i = 0; i < 2; i++) {
+			String[] inputComponents = nextInput.split("\\s+", numPerLine);
+			for (int i = 0; i < numPerLine; i++) {
 				try{
 				inputArray[lineNo][i] = Double.parseDouble(inputComponents[i]);
 				} catch (NumberFormatException e)

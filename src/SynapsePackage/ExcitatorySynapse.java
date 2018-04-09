@@ -15,9 +15,10 @@ public class ExcitatorySynapse extends AbstractSynapse {
 	 * @param weight
 	 * @param stype
 	 * @param compartment
+	 * @param ID
 	 */
-	public ExcitatorySynapse(double weight, SynapseForm stype, AbstractCompartment compartment) {
-		super(weight, stype, compartment);
+	public ExcitatorySynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID) {
+		super(weight, stype, compartment, ID);
 		// TODO Auto-generated constructor stub
 	}
 

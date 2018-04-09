@@ -19,16 +19,16 @@ public class PyramidalNeuron extends AbstractNeuron {
 	
 	/*
 	 * ID String identity of the neuron
-	 * samplingRate is sampling rathe used to convert times to sample numbers
+	 * samplingRate is sampling rather used to convert times to sample numbers
 	 */
-	public PyramidalNeuron(String ID, int samplingRate) {
+	public PyramidalNeuron(int ID, int samplingRate) {
 		super(ID);
 // set up the compartments of this neuron
-		// Pyramidal neuron has 4 compartments
-		apicalTuft = new ApicalTuft(this) ;
-		apicalDendrite = new ApicalDendrite(this) ;
-		axonHillock = new AxonHillock(this) ;
-		basalDendrite = new BasalDendrite(this) ;
+		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
+		apicalTuft = new ApicalTuft(this, 2) ;
+		apicalDendrite = new ApicalDendrite(this,3) ;
+		axonHillock = new AxonHillock(this,4) ;
+		basalDendrite = new BasalDendrite(this, 1) ;
 		// set up sampling rate
 		this.samplingRate = samplingRate ;
 	}
@@ -41,8 +41,8 @@ public class PyramidalNeuron extends AbstractNeuron {
 		extDrivingSynapses = new ExternalSynapse[nExtDrivingSynapses] ; // note these are not initialised
 		// set these up in this neuron's BasalDendrite
 		for (int i=0; i<nExtDrivingSynapses; i++) {
-			// create the synapse
-			extDrivingSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.basalDendrite) ;
+			// create the synapse. Note that synapse id's start at 1
+			extDrivingSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.basalDendrite, i+1) ;
 			// initialise the synapse
 		}
 	}
@@ -55,8 +55,8 @@ public class PyramidalNeuron extends AbstractNeuron {
 		extContextSynapses = new ExternalSynapse[nExtContextSynapses] ; // note these are not initialised
 		// set these up in this neuron's ApicalDendrite
 		for (int i=0; i<nExtContextSynapses; i++) {
-			// create the synapse
-			extContextSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.apicalDendrite) ;
+			// create the synapse. Note that synapse ID's start at 1
+			extContextSynapses[i] = new ExternalSynapse(0, SynapseForm.EXCITATORY, this.apicalDendrite, i+1) ;
 			// initialise the synapse
 		}
 		

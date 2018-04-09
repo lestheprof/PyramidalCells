@@ -1,11 +1,11 @@
 package NeuronPackage;
 
 public abstract class AbstractNeuron {
-public String neuronID ;
+public int neuronID ;
 /*
  * @param ID the (String) identity of this neuron
  */
-	public AbstractNeuron(String ID) {
+	public AbstractNeuron(int ID) {
 		this.neuronID = ID ;
 	}
 

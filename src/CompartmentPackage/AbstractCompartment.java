@@ -6,14 +6,16 @@ public abstract class AbstractCompartment {
 
 	public AbstractNeuron myNeuron ;
 	public double activation ;
+	public int compartmentID ;
 	
-	public AbstractCompartment(AbstractNeuron neuron) {
+	public AbstractCompartment(AbstractNeuron neuron, int compartmentID) {
 		// TODO Auto-generated constructor stub
 		this.activation = 0 ; // initialise the activation, here in this abstract version, to 0
 		this.myNeuron = neuron ;
+		this.compartmentID = compartmentID ;
 	}
 	
-	public String getNeuronID(){
+	public int getNeuronID(){
 		return myNeuron.neuronID ;
 	}
 	
