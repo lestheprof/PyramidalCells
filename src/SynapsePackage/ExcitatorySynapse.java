@@ -8,6 +8,7 @@ import CompartmentPackage.AbstractCompartment;
 /**
  * @author lss
  * Internal synapse (from an axonic output to a compartment). Excitatory.
+ * Note that synapse numbers start at 1. Synapse 0 not used.
  */
 public class ExcitatorySynapse extends AbstractSynapse {
 

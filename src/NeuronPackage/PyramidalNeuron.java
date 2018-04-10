@@ -14,23 +14,21 @@ public class PyramidalNeuron extends AbstractNeuron {
 	public BasalDendrite basalDendrite ;
 	private ExternalSynapse[] extDrivingSynapses ;
 	private ExternalSynapse[] extContextSynapses ;
-	private int samplingRate ;
 	public List<Double> spikesOut = null ;
 	
 	/*
 	 * ID String identity of the neuron
 	 * samplingRate is sampling rather used to convert times to sample numbers
 	 */
-	public PyramidalNeuron(int ID, int samplingRate) {
-		super(ID);
+	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical) {
+		super(ID, samplingRate);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
-		apicalTuft = new ApicalTuft(this, 2) ;
+		apicalTuft = new ApicalTuft(this, 2, tauApical) ;
 		apicalDendrite = new ApicalDendrite(this,3) ;
 		axonHillock = new AxonHillock(this,4) ;
-		basalDendrite = new BasalDendrite(this, 1) ;
-		// set up sampling rate
-		this.samplingRate = samplingRate ;
+		basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
+
 	}
 	
 	/*
@@ -41,20 +39,21 @@ public class PyramidalNeuron extends AbstractNeuron {
 		int nExtDrivingSynapses = 0 ;
 		for (int index = 0 ; index < extSynapticWeights.length ; index++){
 			// use only synapses to this neuron
-			if (extSynapticWeights[index][2] == this.neuronID){
-			if (nExtDrivingSynapses < (int)(Math.round(extSynapticWeights[index][2])))
-				nExtDrivingSynapses = (int)(Math.round(extSynapticWeights[index][2])) ;
+			if (extSynapticWeights[index][0] == this.neuronID){
+			if (nExtDrivingSynapses < (int)(Math.round(extSynapticWeights[index][1])))
+				nExtDrivingSynapses = (int)(Math.round(extSynapticWeights[index][1])) ;
 			}	
 		}
+		nExtDrivingSynapses = nExtDrivingSynapses + 1 ; // because the numbers start at 1. Synapse 0 not used
 		// set up an array of external driving synapses
 		extDrivingSynapses = new ExternalSynapse[nExtDrivingSynapses] ; // note these are not initialised
 		// set these up in this neuron's BasalDendrite
 		for (int i=0; i<extSynapticWeights.length; i++) {
 			// create the synapse. Note that synapse id's start at 1
-			int synapseNumber = (int)(Math.round(extSynapticWeights[i][2])) ;
+			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
 			if (synapseNumber > 0)
 			extDrivingSynapses[synapseNumber] = 
-					new ExternalSynapse(extSynapticWeights[i][3], SynapseForm.EXCITATORY, this.basalDendrite, i+1) ;
+					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.basalDendrite, i+1) ;
 			// initialise the synapse
 		}
 	}
@@ -66,20 +65,21 @@ public class PyramidalNeuron extends AbstractNeuron {
 		int nExtDrivingSynapses = 0 ;
 		for (int index = 0 ; index < extSynapticWeights.length ; index++){
 			// use only synapses to this neuron
-			if (extSynapticWeights[index][2] == this.neuronID){
-			if (nExtDrivingSynapses < (int)(Math.round(extSynapticWeights[index][2])))
-				nExtDrivingSynapses = (int)(Math.round(extSynapticWeights[index][2])) ;
+			if (extSynapticWeights[index][0] == this.neuronID){
+			if (nExtDrivingSynapses < (int)(Math.round(extSynapticWeights[index][1])))
+				nExtDrivingSynapses = (int)(Math.round(extSynapticWeights[index][1])) ;
 			}	
 		}
+		nExtDrivingSynapses = nExtDrivingSynapses + 1 ; // because the numbers start at 1. Synapse 0 not used
 		// set up an array of external driving synapses
 		extContextSynapses = new ExternalSynapse[nExtDrivingSynapses] ; // note these are not initialised
 		// set these up in this neuron's BasalDendrite
 		for (int i=0; i<extSynapticWeights.length; i++) {
 			// create the synapse. Note that synapse id's start at 1
-			int synapseNumber = (int)(Math.round(extSynapticWeights[i][2])) ;
+			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
 			if (synapseNumber > 0)
 			extContextSynapses[synapseNumber] = 
-					new ExternalSynapse(extSynapticWeights[i][3], SynapseForm.EXCITATORY, this.apicalTuft, i+1) ;
+					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.apicalTuft, i+1) ;
 			// initialise the synapse
 		}
 	}
@@ -89,7 +89,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 		basalDendrite.run(currentTime); // update state of basal dendrite
 		apicalTuft.run(currentTime); // update state of  apical dendrite
 		apicalDendrite.run(currentTime); // use the above two to nonlinearly mix
-		// what's below won't work: needs the code of the runs above to be instantited
+		// what's below won't work: needs the code of the runs above to be instantiated
 		if (axonHillock.runAndSpike(currentTime))	// attempt to generate output spikes
 			spikesOut.add(currentTime) ;
 	}

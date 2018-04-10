@@ -12,7 +12,9 @@ public abstract class AbstractSynapse {
 	public int neuronID ;
 	public int compartmentID ;
 	public int synapseID ;
-
+	
+	public double samplingInterval ;
+	public int samplingrate ;
 
 	public double weight ; 
 	public SynapseForm synapseType ;
@@ -36,6 +38,8 @@ public abstract class AbstractSynapse {
 			this.compartmentID = targetCompartment.compartmentID ;
 			this.neuronID = targetCompartment.myNeuron.neuronID ;
 			this.synapseID = synapseID ;
+			this.samplingInterval = targetCompartment.samplingInterval ;
+			this.samplingrate = targetCompartment.samplingrate ;
 					
 	}
 

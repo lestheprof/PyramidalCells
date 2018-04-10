@@ -41,6 +41,9 @@ public class RunSingleNeuron {
 		
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
+		
+		double tauBasal = 0 ; // time constant for basal compartment
+		double tauApical = 0 ; // time constant for apical compartment
 
 		int argno = 0 ;
 		while (argno < args.length)
@@ -71,6 +74,14 @@ public class RunSingleNeuron {
 				contextSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break  ;
+			case "-t_basal": // time constant (tau) for basal dendrite
+				tauBasal = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
+			case "-t_apical": // time constant (tau) for basal dendrite
+				tauApical = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -78,7 +89,7 @@ public class RunSingleNeuron {
 			}
 		
 		// set up the neuron, with id = 1
-		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate) ;
+		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate, tauBasal, tauApical) ;
 		// set up the synapses on this neuron
 		
 		if (contextSynapseWeights != null)
