@@ -11,24 +11,26 @@ import CompartmentPackage.AbstractCompartment;
  */
 public class ExternalSynapse extends AbstractSynapse {
 
+	double[] spikeTimes = null; // external spike times for this synapse
 	/**
 	 * @param weight
 	 * @param stype
 	 * @param compartment
 	 * @param ID
+	 * @param alpha
 	 */
-	public ExternalSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID) {
-		super(weight, stype, compartment, ID);
+	public ExternalSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID, double alpha) {
+		super(weight, stype, compartment, ID, alpha);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void setExternalInputs(){
-		//takes a list of times (integer simulation times), and stores them
-		// these originate outside of the system (in a file?)
+	public void setExternalInputs(double[] spikeTimes){
+		//takes a list of times of external spikes, and stores them
+		// these originate outside of the system (in a file referenced in the argc's
 		// used in runStep to show that an external action potential has arrived here
 	}
 	
-	public double runStep(){
+	public double runStep(double currentTime){
 		
 		return postSynapticActivation ; 	
 	}

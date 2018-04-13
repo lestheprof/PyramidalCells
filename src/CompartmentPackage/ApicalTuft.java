@@ -4,6 +4,7 @@
 package CompartmentPackage;
 
 import NeuronPackage.PyramidalNeuron;
+import SynapsePackage.*;
 
 /**
  * @author lss
@@ -12,6 +13,9 @@ import NeuronPackage.PyramidalNeuron;
 public class ApicalTuft extends AbstractCompartment {
 
 	public double tauApical ; // time constant
+	private ExternalSynapse[] extSynapses  = null;
+	private InternalSynapse[] intSynapses  = null;
+	
 	/**
 	 * neuron is the Pyramidal neuron object to which this apical tuft belongs
 	 * tauApical is time constant for this compartment
@@ -21,5 +25,19 @@ public class ApicalTuft extends AbstractCompartment {
 		this.tauApical = tauApical ;
 	}
 	
+	public void setExternalSynapses(ExternalSynapse[] extSynapses){
+		this.extSynapses = extSynapses ;
+	}
+	
+	public void setInternalSynapses(InternalSynapse[] intSynapses){		
+	}
+	
+	public void setContextSpikes(double[][] contextSpikes){
+		
+	}
+	
+	public void run(double currentTime){
+		
+	}
 
 }

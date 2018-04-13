@@ -19,22 +19,25 @@ public class PyramidalNeuron extends AbstractNeuron {
 	/*
 	 * ID String identity of the neuron
 	 * samplingRate is sampling rather used to convert times to sample numbers
+	 * tauBasal is time constant for basal dendrites
+	 * tauApical is time constant for Apical tuft dendrites
 	 */
 	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical) {
 		super(ID, samplingRate);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
-		apicalTuft = new ApicalTuft(this, 2, tauApical) ;
-		apicalDendrite = new ApicalDendrite(this,3) ;
-		axonHillock = new AxonHillock(this,4) ;
-		basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
+		this.apicalTuft = new ApicalTuft(this, 2, tauApical) ;
+		this.apicalDendrite = new ApicalDendrite(this,3) ;
+		this.axonHillock = new AxonHillock(this,4) ;
+		this.basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
 
 	}
 	
 	/*
 	 * extSynapticWeights is the array of external synaptic weights read from the file)
+	 * alpha is the alpha value for the temporal distribution of post-synaptic output
 	 */
-	public void setUpExternalDrivingSynapses(double [][] extSynapticWeights){
+	public void setUpExternalDrivingSynapses(double [][] extSynapticWeights, double alpha){
 		// find the highest synapse number
 		int nExtDrivingSynapses = 0 ;
 		for (int index = 0 ; index < extSynapticWeights.length ; index++){
@@ -52,16 +55,19 @@ public class PyramidalNeuron extends AbstractNeuron {
 			// create the synapse. Note that synapse id's start at 1
 			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
 			if (synapseNumber > 0)
-			extDrivingSynapses[synapseNumber] = 
-					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.basalDendrite, i+1) ;
-			// initialise the synapse
+			extDrivingSynapses[synapseNumber] = // initialise the synapse
+					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.basalDendrite, i+1, alpha) ;
+			
 		}
+		// associate this synaptic array with the basal dendrite compartment
+		this.basalDendrite.setExternalSynapses(extDrivingSynapses);
 	}
 	
 	/*
 	 * nExtContextSynapses synapses is the number of context synapses (external for now)
+	 * alpha is the alpha value for the temporal distribution of post-synaptic output
 	 */
-	public void setUpExternalContextSynapses(double [][] extSynapticWeights){
+	public void setUpExternalContextSynapses(double [][] extSynapticWeights, double alpha){
 		int nExtDrivingSynapses = 0 ;
 		for (int index = 0 ; index < extSynapticWeights.length ; index++){
 			// use only synapses to this neuron
@@ -78,10 +84,54 @@ public class PyramidalNeuron extends AbstractNeuron {
 			// create the synapse. Note that synapse id's start at 1
 			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
 			if (synapseNumber > 0)
-			extContextSynapses[synapseNumber] = 
-					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.apicalTuft, i+1) ;
-			// initialise the synapse
+			extContextSynapses[synapseNumber] = // initialise the synapse
+					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.apicalTuft, i+1, alpha) ;
+			
 		}
+		// associate this synaptic array with the apical tuft
+		this.apicalTuft.setExternalSynapses(extContextSynapses);
+	}
+	
+	/*
+	 * @param drivingSpikeTimes driving spike times
+	 */
+	public void setDrivingInputs(double [][] drivingSpikeTimes){
+		// store these at the basal dendrite
+		// inputs are N by 3, namely neuron, synapse, time
+		// use only those with this neuronID
+		// how many are there?
+		int mySpikesNo = 0 ;
+		for (int i = 0; i<drivingSpikeTimes.length; i++){
+			if (drivingSpikeTimes[i][0] == this.neuronID) mySpikesNo = mySpikesNo + 1 ;
+		}
+		double [][] myDrivingSpikes  = new double[mySpikesNo][3] ;
+		for (int i = 0; i<drivingSpikeTimes.length; i++){
+			if (drivingSpikeTimes[i][0] == this.neuronID) 
+				myDrivingSpikes[i] = drivingSpikeTimes[i] ;
+		}
+		// send these to the basal dendrite
+		basalDendrite.setDrivingSpikes(myDrivingSpikes);
+	}
+
+	/*
+	 * @param contextSpikeTimes driving spike times
+	 */
+	public void setContextualInputs(double [][] contextSpikeTimes){
+		// store these at the apical tuft
+		// inputs are N by 3, namely neuron, synapse, time
+		// use only those with this neuronID
+		// how many are there?
+		int mySpikesNo = 0 ;
+		for (int i = 0; i<contextSpikeTimes.length; i++){
+			if (contextSpikeTimes[i][0] == this.neuronID) mySpikesNo = mySpikesNo + 1 ;
+		}
+		double [][] myContextSpikes  = new double[mySpikesNo][3] ;
+		for (int i = 0; i<contextSpikeTimes.length; i++){
+			if (contextSpikeTimes[i][0] == this.neuronID) 
+				myContextSpikes[i] = contextSpikeTimes[i] ;
+		}
+		// send these to the apical tuft
+		apicalTuft.setContextSpikes(myContextSpikes);
 	}
 
 	public void run(double currentTime){

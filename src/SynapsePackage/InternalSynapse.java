@@ -10,7 +10,7 @@ import CompartmentPackage.AbstractCompartment;
  * Internal synapse (from an axonic output to a compartment). Excitatory.
  * Note that synapse numbers start at 1. Synapse 0 not used.
  */
-public class ExcitatorySynapse extends AbstractSynapse {
+public class InternalSynapse extends AbstractSynapse {
 
 	/**
 	 * @param weight
@@ -18,8 +18,8 @@ public class ExcitatorySynapse extends AbstractSynapse {
 	 * @param compartment
 	 * @param ID
 	 */
-	public ExcitatorySynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID) {
-		super(weight, stype, compartment, ID);
+	public InternalSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID, double alpha) {
+		super(weight, stype, compartment, ID, alpha);
 		// TODO Auto-generated constructor stub
 	}
 

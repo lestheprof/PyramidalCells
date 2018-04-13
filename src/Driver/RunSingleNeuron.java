@@ -44,16 +44,20 @@ public class RunSingleNeuron {
 		
 		double tauBasal = 0 ; // time constant for basal compartment
 		double tauApical = 0 ; // time constant for apical compartment
+		
+		double alphaDriving = 1000 ; // alpha value for driving synapses
+		double alphaContext = 1000 ; // alpha value for contextual synapses
+
 
 		int argno = 0 ;
 		while (argno < args.length)
 			switch(args[argno]){
 			case "-c": // followed by input spike file name, so get file name for external contextual spike inputs
-				contextArray = readInputsToArrayFromFile(args[argno + 1], 2);
+				contextArray = readInputsToArrayFromFile(args[argno + 1], 3); // neuron, synapse time
 				argno = argno + 2 ;
 				break;
 			case "-d": // followed by input spike file name, so get file name for external driving spike inputs
-				drivingArray = readInputsToArrayFromFile(args[argno + 1], 2);	
+				drivingArray = readInputsToArrayFromFile(args[argno + 1], 3);	// neuron synapse time
 				argno = argno + 2 ;
 				break;
 			case "-s": // followed by sampling rate (defaults to 10000)
@@ -82,6 +86,14 @@ public class RunSingleNeuron {
 				tauApical = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
+			case "-alpha_driver": // alpha value for driving synapses
+				alphaDriving = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
+			case "-alpha_context": // alpha value for contextual synapses	
+				alphaContext = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -94,7 +106,7 @@ public class RunSingleNeuron {
 		
 		if (contextSynapseWeights != null)
 		{
-			neuron.setUpExternalContextSynapses(contextSynapseWeights);
+			neuron.setUpExternalContextSynapses(contextSynapseWeights, alphaContext);
 		}
 		else {
 			System.err.println("main: No context synapse file. Exiting. BooHooHoo");
@@ -104,13 +116,17 @@ public class RunSingleNeuron {
 		if (drivingSynapseWeights != null)
 		{
 			// System.out.println("drivingSynapseWeights.length = " + drivingSynapseWeights.length);
-			neuron.setUpExternalDrivingSynapses(drivingSynapseWeights);
+			neuron.setUpExternalDrivingSynapses(drivingSynapseWeights, alphaDriving);
 		}
 		else {
 			System.err.println("main: No driving synapse file. Exiting. BooHoo");
 			System.exit(1);
 		}
 		
+		// store the driving inputs (drivingArray) at the neuron
+		neuron.setDrivingInputs(drivingArray);
+		// store the context inputs (contextArray) at the neuron
+		neuron.setContextualInputs(contextArray);
 		
 		// simulation loop
 		currentTime = 0 ; // start at 0
