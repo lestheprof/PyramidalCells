@@ -11,7 +11,8 @@ import CompartmentPackage.AbstractCompartment;
  */
 public class ExternalSynapse extends AbstractSynapse {
 
-	double[] spikeTimes = null; // external spike times for this synapse
+	private Double[] spikeTimes = null; // external spike times for this synapse
+	private boolean debug = true ;
 	/**
 	 * @param weight
 	 * @param stype
@@ -24,10 +25,21 @@ public class ExternalSynapse extends AbstractSynapse {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void setExternalInputs(double[] spikeTimes){
+	public void setExternalInputs(Double[] spikeTimes){
 		//takes a list of times of external spikes, and stores them
 		// these originate outside of the system (in a file referenced in the argc's
 		// used in runStep to show that an external action potential has arrived here
+		this.spikeTimes = spikeTimes  ;
+		if (debug){
+			System.out.println(targetCompartment.compartmentType) ;
+			System.out.print("Synapse " + synapseID + " spike times " );
+			for (int spikeNo = 0; spikeNo < spikeTimes.length; spikeNo++)
+				System.out.print(spikeTimes[spikeNo].doubleValue() + " ");
+			System.out.println() ;
+			
+		}
+		
+		// 
 	}
 	
 	public double runStep(double currentTime){

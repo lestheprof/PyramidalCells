@@ -9,6 +9,7 @@ public abstract class AbstractCompartment {
 	public int compartmentID ;
 	public double samplingInterval ;
 	public int samplingrate ;
+	public String compartmentType = null ;
 	
 	public AbstractCompartment(AbstractNeuron neuron, int compartmentID) {
 		// TODO Auto-generated constructor stub

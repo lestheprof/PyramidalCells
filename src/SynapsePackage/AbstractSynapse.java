@@ -13,7 +13,7 @@ public abstract class AbstractSynapse {
 	public double postSynapticActivation ; 
 	public int neuronID ;
 	public int compartmentID ;
-	public int synapseID ;
+	public int synapseID ; // NB these start at 1
 	
 	public double samplingInterval ;
 	public int samplingrate ;
