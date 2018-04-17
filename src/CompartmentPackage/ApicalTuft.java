@@ -18,6 +18,9 @@ public class ApicalTuft extends AbstractCompartment {
 	public double tauApical ; // time constant
 	private ExternalSynapse[] extSynapses  = null;
 	private InternalSynapse[] intSynapses  = null;
+	
+	public double internalActivation ;
+	public double externalActivation ;
 
 	
 	/**
@@ -54,7 +57,24 @@ public class ApicalTuft extends AbstractCompartment {
 	}
 	
 	public void run(double currentTime){
-		
+		// gather up the contribution from the synapses to this compartment
+				double internalActivation = 0;
+				double externalActivation = 0 ;
+				
+				// internal synapses
+				if (!(intSynapses == null)) // if there's no internal synapses
+				for (int synapseNo = 1 ; synapseNo < intSynapses.length; synapseNo ++)
+				{
+					internalActivation = internalActivation + intSynapses[synapseNo].runStep(currentTime) ;
+				}
+				if (!(extSynapses == null)) // if there's no external synapses
+				for (int synapseNo = 1 ; synapseNo < extSynapses.length; synapseNo ++)
+				{
+					externalActivation = externalActivation + extSynapses[synapseNo].runStep(currentTime) ;
+				}
+				this.internalActivation = internalActivation ;
+				this.externalActivation = externalActivation ;
+				this.activation = this.internalActivation + this.externalActivation ;
 	}
 
 }

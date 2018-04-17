@@ -144,6 +144,10 @@ public class PyramidalNeuron extends AbstractNeuron {
 				System.out.println("time = " + currentTime + " Basal D activation = " + basalDendrite.activation);
 		}
 		apicalTuft.run(currentTime); // update state of  apical dendrite
+		if (debug){
+			if (apicalTuft.activation > 0)
+				System.out.println("time = " + currentTime + " Apical Tuft activation = " + apicalTuft.activation);
+		}
 		apicalDendrite.run(currentTime); // use the above two to nonlinearly mix
 		// what's below won't work: needs the code of the runs above to be instantiated
 		if (axonHillock.runAndSpike(currentTime))	// attempt to generate output spikes
