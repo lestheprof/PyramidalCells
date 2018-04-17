@@ -18,6 +18,11 @@ public class BasalDendrite extends AbstractCompartment {
 	public double tauBasal ; // time constant for this compartment
 	private ExternalSynapse[]  extSynapses  = null;
 	private InternalSynapse[] intSynapses  = null;
+	public double internalActivation ;
+	public double externalActivation ;
+	
+	private boolean debug = true ;
+	
 	/**
 	 * neuron is the Pyramidal neuron object to which this basal dendrite belongs
 	 */
@@ -52,6 +57,24 @@ public class BasalDendrite extends AbstractCompartment {
 	}
 	
 	public void run(double currentTime){
+		// gather up the contribution from the synapses to this compartment
+		double internalActivation = 0;
+		double externalActivation = 0 ;
+		
+		// internal synapses
+		if (!(intSynapses == null)) // if there's no internal synapses
+		for (int synapseNo = 1 ; synapseNo < intSynapses.length; synapseNo ++)
+		{
+			internalActivation = internalActivation + intSynapses[synapseNo].runStep(currentTime) ;
+		}
+		if (!(extSynapses == null)) // if there's no external synapses
+		for (int synapseNo = 1 ; synapseNo < extSynapses.length; synapseNo ++)
+		{
+			externalActivation = externalActivation + extSynapses[synapseNo].runStep(currentTime) ;
+		}
+		this.internalActivation = internalActivation ;
+		this.externalActivation = externalActivation ;
+		this.activation = this.internalActivation + this.externalActivation ;
 		
 	}
 

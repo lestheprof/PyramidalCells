@@ -12,6 +12,8 @@ import CompartmentPackage.AbstractCompartment;
 public class ExternalSynapse extends AbstractSynapse {
 
 	private Double[] spikeTimes = null; // external spike times for this synapse
+	private int spikeTimeIndex;
+	private boolean inspike ;// set when we are inside the alpha function
 	private boolean debug = true ;
 	/**
 	 * @param weight
@@ -22,7 +24,9 @@ public class ExternalSynapse extends AbstractSynapse {
 	 */
 	public ExternalSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID, double alpha) {
 		super(weight, stype, compartment, ID, alpha);
-		// TODO Auto-generated constructor stub
+	// set 	spike time index to -1 ;
+		spikeTimeIndex = -1 ;
+		inspike = false ;
 	}
 	
 	public void setExternalInputs(Double[] spikeTimes){
@@ -43,7 +47,37 @@ public class ExternalSynapse extends AbstractSynapse {
 	}
 	
 	public double runStep(double currentTime){
+		// calculate the post-synaptic activity from this synapse and return it
+		// this version restarts the alpha function when a new spike occurs
+		// is there a new spike at this time
+		if ((spikeTimeIndex+1 < spikeTimes.length) && (spikeTimes[spikeTimeIndex + 1] <= currentTime)){
+			// there is a new spike
+			spikeTimeIndex = spikeTimeIndex + 1 ; // point to new spike
+			inspike = true ;
+			alphaIndex = 0 ;
+		}
+		else{
+			// continue either with old spike or no spike
+			if (! inspike){
+				postSynapticActivation = 0;
+				return postSynapticActivation ;
+			}
+			else{
+				// where are we in the alpha function?
+				postSynapticActivation = this.weight * this.alphaArray[this.alphaIndex] ;
+				alphaIndex = alphaIndex + 1 ;
+				if (alphaIndex == alphaArrayLength){
+					inspike = false ;
+				}
+				return postSynapticActivation ;		
+			}
+		}
 		
+		postSynapticActivation = this.weight * this.alphaArray[this.alphaIndex] ;
+		alphaIndex = alphaIndex + 1 ;
+		if (alphaIndex == alphaArrayLength){
+			inspike = false ;
+		}
 		return postSynapticActivation ; 	
 	}
 }

@@ -16,6 +16,8 @@ public class PyramidalNeuron extends AbstractNeuron {
 	private ExternalSynapse[] extContextSynapses ;
 	public List<Double> spikesOut = null ;
 	
+	private boolean debug = true ;
+	
 	/*
 	 * ID String identity of the neuron
 	 * samplingRate is sampling rather used to convert times to sample numbers
@@ -137,6 +139,10 @@ public class PyramidalNeuron extends AbstractNeuron {
 	public void run(double currentTime){
 		// run neuron for a single time step
 		basalDendrite.run(currentTime); // update state of basal dendrite
+		if (debug){
+			if (basalDendrite.activation > 0)
+				System.out.println("time = " + currentTime + " Basal D activation = " + basalDendrite.activation);
+		}
 		apicalTuft.run(currentTime); // update state of  apical dendrite
 		apicalDendrite.run(currentTime); // use the above two to nonlinearly mix
 		// what's below won't work: needs the code of the runs above to be instantiated

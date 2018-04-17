@@ -22,5 +22,9 @@ public class InternalSynapse extends AbstractSynapse {
 		super(weight, stype, compartment, ID, alpha);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public double runStep(double currentTime){
+		return 0 ; // for now
+	}
 
 }

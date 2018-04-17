@@ -131,6 +131,8 @@ public class RunSingleNeuron {
 		// simulation loop
 		currentTime = 0 ; // start at 0
 		deltaTime = 1.0/samplingRate ; // time increment (sample interval)
+		System.out.println("Simulation starting");
+
 		while (currentTime < endTime){
 			// run neuron 1 time step
 			neuron.run(currentTime);

@@ -21,6 +21,7 @@ public abstract class AbstractSynapse {
 	public double weight ; 
 	public double alpha ;
 	public double[] alphaArray ;
+	public int alphaIndex ;
 	public int alphaArrayLength;
 	public SynapseForm synapseType ;
 	public AbstractCompartment targetCompartment ;
@@ -65,8 +66,8 @@ public abstract class AbstractSynapse {
 		alphaArray = new double[this.alphaArrayLength] ;
 		// fill the alpha array
 		double alphaSum = 0 ;
-		for (int i = 0 ; i < this.alphaArrayLength; i++){
-			alphaArray[i] = ((i-1) * samplingInterval) * Math.exp(this.alpha * ((i-1) * samplingInterval)) ;
+		for (int i = 0 ; i < this.alphaArrayLength; i++){ // omit alpha scaling factor as we normalise later
+			alphaArray[i] = (i * samplingInterval) * Math.exp(1 - this.alpha * (i * samplingInterval)) ;
 			alphaSum = alphaSum + alphaArray[i] ;
 		}
 		// normalise to add to 1. Length of 1 is a special case
