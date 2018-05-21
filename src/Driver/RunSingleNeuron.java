@@ -47,6 +47,11 @@ public class RunSingleNeuron {
 		
 		double alphaDriving = 1000 ; // alpha value for driving synapses
 		double alphaContext = 1000 ; // alpha value for contextual synapses
+		
+		double apicalMultiplier = 1 ; // multiplier for apical dendrite: output = mult * logistic(gradient * input)
+		double apicalGradient = 1 ;
+		
+		double threshold = 1 ; // threshold for axon hillock
 
 
 		int argno = 0 ;
@@ -93,7 +98,19 @@ public class RunSingleNeuron {
 			case "-alpha_context": // alpha value for contextual synapses	
 				alphaContext = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
-				break ;
+				break ;	
+			case "-apical_multiplier": // apical multiplier for apical dendrite	
+				apicalMultiplier = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
+			case "-apical_gradient": // apical gradient for apical dendrite	
+				apicalGradient = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
+			case "axon_threshold": // axon threshold
+				threshold = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -101,7 +118,8 @@ public class RunSingleNeuron {
 			}
 		
 		// set up the neuron, with id = 1
-		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate, tauBasal, tauApical) ;
+		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
+				apicalGradient, threshold) ;
 		// set up the synapses on this neuron
 		
 		if (contextSynapseWeights != null)
@@ -138,6 +156,11 @@ public class RunSingleNeuron {
 			neuron.run(currentTime);
 			currentTime = currentTime + deltaTime ;
 		}
+		// generated spikes are in neuron.spikesOut
+		System.out.println("Spikes generated:");
+		Iterator <Double> spikeIterator = neuron.spikesOut.iterator();
+		while (spikeIterator.hasNext())
+			System.out.println("Neuron " + neuron.neuronID + " fired at time "+ spikeIterator.next()) ;
 		System.out.println("Simulation ended");
 		
 	}

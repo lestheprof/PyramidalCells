@@ -3,6 +3,8 @@ package NeuronPackage;
 import CompartmentPackage.*;
 import SynapsePackage.ExternalSynapse;
 import SynapsePackage.SynapseForm;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,18 +22,20 @@ public class PyramidalNeuron extends AbstractNeuron {
 	
 	/*
 	 * ID String identity of the neuron
-	 * samplingRate is sampling rather used to convert times to sample numbers
+	 * samplingRate is sampling rate used to convert times to sample numbers
 	 * tauBasal is time constant for basal dendrites
 	 * tauApical is time constant for Apical tuft dendrites
 	 */
-	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical) {
+	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical, 
+			double apical_multiplier ,double apical_gradient, double threshold) {
 		super(ID, samplingRate);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
 		this.apicalTuft = new ApicalTuft(this, 2, tauApical) ;
-		this.apicalDendrite = new ApicalDendrite(this,3) ;
-		this.axonHillock = new AxonHillock(this,4) ;
+		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3) ;
+		this.axonHillock = new AxonHillock(this,4, threshold) ;
 		this.basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
+		this.spikesOut = new ArrayList<> () ;
 
 	}
 	
@@ -149,8 +153,16 @@ public class PyramidalNeuron extends AbstractNeuron {
 				System.out.println("time = " + currentTime + " Apical Tuft activation = " + apicalTuft.activation);
 		}
 		apicalDendrite.run(currentTime); // use the above two to nonlinearly mix
-		// what's below won't work: needs the code of the runs above to be instantiated
+		if (debug){
+			//  (apicalDendrite.activation > 0)
+				System.out.println("time = " + currentTime + " apical Dendrite activation = " + apicalDendrite.activation);
+		}
+		// what's below won't work: needs the code of the runs above to be instantiated (done)
 		if (axonHillock.runAndSpike(currentTime))	// attempt to generate output spikes
 			spikesOut.add(currentTime) ;
+		if (debug){
+			if (axonHillock.activation > 0)
+				System.out.println("time = " + currentTime + " axon Hillock activation = " + axonHillock.activation);
+		}
 	}
 }
