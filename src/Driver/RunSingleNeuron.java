@@ -194,7 +194,7 @@ public class RunSingleNeuron {
 		Iterator<String> inputIterator = InputList.iterator();
 		while (inputIterator.hasNext()) {
 			String nextInput = inputIterator.next().trim();
-			String[] inputComponents = nextInput.split("\\s+", numPerLine);
+			String[] inputComponents = nextInput.split("\\s+|,", numPerLine); // allows spaces or single commas as separators
 			for (int i = 0; i < numPerLine; i++) {
 				try{
 				inputArray[lineNo][i] = Double.parseDouble(inputComponents[i]);
