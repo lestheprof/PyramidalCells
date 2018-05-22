@@ -21,6 +21,8 @@ public class ApicalTuft extends AbstractCompartment {
 	
 	public double internalActivation ;
 	public double externalActivation ;
+	
+	public double activityChange ;
 
 	
 	/**
@@ -31,6 +33,11 @@ public class ApicalTuft extends AbstractCompartment {
 		super(neuron, id) ; // so compartment knows its neuron id and its own id
 		this.tauApical = tauApical ;
 		compartmentType = "Apical Tuft Compartment" ;
+		// calculate the leakiness per sample
+		if (tauApical == 0)
+			this.activityChange = 0 ;
+		else
+			this.activityChange = Math.exp(- neuron.samplingInterval / tauApical) ; // pre-calculate amount by which activation decreases each time interval
 	}
 	
 	public void setExternalSynapses(ExternalSynapse[] extSynapses){
@@ -74,7 +81,7 @@ public class ApicalTuft extends AbstractCompartment {
 				}
 				this.internalActivation = internalActivation ;
 				this.externalActivation = externalActivation ;
-				this.activation = this.internalActivation + this.externalActivation ;
+				this.activation = (this.activation * this.activityChange) + this.internalActivation + this.externalActivation ;
 	}
 
 }

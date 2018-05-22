@@ -20,6 +20,7 @@ public class BasalDendrite extends AbstractCompartment {
 	private InternalSynapse[] intSynapses  = null;
 	public double internalActivation ;
 	public double externalActivation ;
+	double activityChange ;
 	
 	private boolean debug = true ;
 	
@@ -30,7 +31,11 @@ public class BasalDendrite extends AbstractCompartment {
 		super(neuron, id) ; // so compartment knows its neuron id and its own id
 		this.tauBasal = tauBasal ;
 		compartmentType = "Basal Dendrite Compartment" ;
-		// TODO Auto-generated constructor stub
+		// calculate the leakiness per sample
+		if (tauBasal == 0)
+			this.activityChange = 0; 
+		else
+		 this.activityChange = Math.exp(- neuron.samplingInterval / tauBasal) ; // pre-calculate amount by which activation decreases each time interval
 	}
 	
 	public void setExternalSynapses(ExternalSynapse[] extSynapses){
@@ -74,7 +79,7 @@ public class BasalDendrite extends AbstractCompartment {
 		}
 		this.internalActivation = internalActivation ;
 		this.externalActivation = externalActivation ;
-		this.activation = this.internalActivation + this.externalActivation ;
+		this.activation = (this.activation * this.activityChange) + this.internalActivation + this.externalActivation ;
 		
 	}
 

@@ -42,8 +42,8 @@ public class RunSingleNeuron {
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
 		
-		double tauBasal = 0 ; // time constant for basal compartment
-		double tauApical = 0 ; // time constant for apical compartment
+		double tauBasal = 0.1 ; // time constant for basal compartment
+		double tauApical = 0.1 ; // time constant for apical compartment
 		
 		double alphaDriving = 1000 ; // alpha value for driving synapses
 		double alphaContext = 1000 ; // alpha value for contextual synapses

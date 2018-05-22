@@ -18,7 +18,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 	private ExternalSynapse[] extContextSynapses ;
 	public List<Double> spikesOut = null ;
 	
-	private boolean debug = true ;
+	private boolean debug = false ;
 	
 	/*
 	 * ID String identity of the neuron
