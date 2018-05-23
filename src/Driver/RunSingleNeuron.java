@@ -52,6 +52,7 @@ public class RunSingleNeuron {
 		double apicalGradient = 1 ;
 		
 		double threshold = 1 ; // threshold for axon hillock
+		double refractoryPeriod = 0 ; // default is no RP
 
 
 		int argno = 0 ;
@@ -111,6 +112,10 @@ public class RunSingleNeuron {
 				threshold = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break  ;
+			case "refractory_period":
+				refractoryPeriod = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -119,7 +124,7 @@ public class RunSingleNeuron {
 		
 		// set up the neuron, with id = 1
 		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
-				apicalGradient, threshold) ;
+				apicalGradient, threshold, refractoryPeriod) ;
 		// set up the synapses on this neuron
 		
 		if (contextSynapseWeights != null)

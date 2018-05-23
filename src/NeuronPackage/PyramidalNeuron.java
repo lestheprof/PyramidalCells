@@ -27,13 +27,13 @@ public class PyramidalNeuron extends AbstractNeuron {
 	 * tauApical is time constant for Apical tuft dendrites
 	 */
 	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical, 
-			double apical_multiplier ,double apical_gradient, double threshold) {
+			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod) {
 		super(ID, samplingRate);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
 		this.apicalTuft = new ApicalTuft(this, 2, tauApical) ;
 		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3) ;
-		this.axonHillock = new AxonHillock(this,4, threshold) ;
+		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod) ;
 		this.basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
 		this.spikesOut = new ArrayList<> () ;
 
@@ -158,8 +158,14 @@ public class PyramidalNeuron extends AbstractNeuron {
 				System.out.println("time = " + currentTime + " apical Dendrite activation = " + apicalDendrite.activation);
 		}
 		// what's below won't work: needs the code of the runs above to be instantiated (done)
-		if (axonHillock.runAndSpike(currentTime))	// attempt to generate output spikes
-			spikesOut.add(currentTime) ;
+		if (axonHillock.runAndSpike(currentTime)) // attempt to generate output spikes
+		{
+			// spike has been generated
+			spikesOut.add(currentTime) ; // add to list of spikes
+			// but what else?
+			// reset the activation of the Basal Dendrite
+			basalDendrite.activation = 0 ;
+		}
 		if (debug){
 			if (axonHillock.activation > 0)
 				System.out.println("time = " + currentTime + " axon Hillock activation = " + axonHillock.activation);
