@@ -40,6 +40,20 @@ public class PyramidalNeuron extends AbstractNeuron {
 	}
 	
 	/*
+	 * Create a pyramidal neuron from t PyramidalNeuyronInfo descriptor
+	 */
+	public PyramidalNeuron(PyramidalNeuronInfo p1) {
+		super(p1.identity, p1.samplingRate);
+// set up the compartments of this neuron
+		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
+		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApical) ;
+		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3) ;
+		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod) ;
+		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal) ;
+		this.spikesOut = new ArrayList<> () ;
+
+	}
+	/*
 	 * extSynapticWeights is the array of external synaptic weights read from the file)
 	 * alpha is the alpha value for the temporal distribution of post-synaptic output
 	 */

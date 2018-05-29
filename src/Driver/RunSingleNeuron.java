@@ -3,7 +3,8 @@
  */
 package Driver;
 
-import NeuronPackage.PyramidalNeuron;
+import NeuronPackage.* ; 
+import Network.NeuronalNetwork;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -34,6 +35,9 @@ public class RunSingleNeuron {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
+		NeuronInfo[] networkInfo = null ;
+		int numberOfNeurons = 1 ;
+		
 		double [][] contextArray = null ;
 		double [][] drivingArray = null ;
 		double [][] contextSynapseWeights = null ;
@@ -121,15 +125,19 @@ public class RunSingleNeuron {
 				argno = argno + 1 ;
 				break ;
 			}
-		
-		// set up the neuron, with id = 1
-		PyramidalNeuron neuron = new PyramidalNeuron(1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
+		// set up the neuronalNetwork with values that go across all neurons
+		NeuronalNetwork NN = new NeuronalNetwork(samplingRate) ;
+		// set up the neuron information, with id = 1 (only 1 for now)
+		networkInfo = new NeuronInfo[1] ;
+		networkInfo[0]  = new PyramidalNeuronInfo(1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
 				apicalGradient, threshold, refractoryPeriod) ;
+		// set up the neural network
+		NN.setup(networkInfo) ;
 		// set up the synapses on this neuron
 		
 		if (contextSynapseWeights != null)
 		{
-			neuron.setUpExternalContextSynapses(contextSynapseWeights, alphaContext);
+			NN.setUpExternalContextSynapses(contextSynapseWeights, alphaContext);
 		}
 		else {
 			System.err.println("main: No context synapse file. Exiting. BooHooHoo");
@@ -139,7 +147,7 @@ public class RunSingleNeuron {
 		if (drivingSynapseWeights != null)
 		{
 			// System.out.println("drivingSynapseWeights.length = " + drivingSynapseWeights.length);
-			neuron.setUpExternalDrivingSynapses(drivingSynapseWeights, alphaDriving);
+			NN.setUpExternalDrivingSynapses(drivingSynapseWeights, alphaDriving);
 		}
 		else {
 			System.err.println("main: No driving synapse file. Exiting. BooHoo");
@@ -147,9 +155,9 @@ public class RunSingleNeuron {
 		}
 		
 		// store the driving inputs (drivingArray) at the neuron
-		neuron.setDrivingInputs(drivingArray);
+		NN.setDrivingInputs(drivingArray);
 		// store the context inputs (contextArray) at the neuron
-		neuron.setContextualInputs(contextArray);
+		NN.setContextualInputs(contextArray);
 		
 		// simulation loop
 		currentTime = 0 ; // start at 0
@@ -158,14 +166,12 @@ public class RunSingleNeuron {
 
 		while (currentTime < endTime){
 			// run neuron 1 time step
-			neuron.run(currentTime);
+			NN.run(currentTime);
 			currentTime = currentTime + deltaTime ;
 		}
 		// generated spikes are in neuron.spikesOut
 		System.out.println("Spikes generated:");
-		Iterator <Double> spikeIterator = neuron.spikesOut.iterator();
-		while (spikeIterator.hasNext())
-			System.out.println("Neuron " + neuron.neuronID + " fired at time "+ spikeIterator.next()) ;
+		NN.displaySpikes();
 		System.out.println("Simulation ended");
 		
 	}
