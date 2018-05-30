@@ -35,7 +35,7 @@ public class NeuronalNetwork {
 				neurons[nno] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[nno]) ;
 			else if (networkInfo[nno] instanceof InterNeuronInfo)
 				neurons[nno] = new InterNeuron((InterNeuronInfo)networkInfo[nno]) ;
-			else System.err.println("NeuronalNetwork.setup: " + "invalie networkInfo type");
+			else System.err.println("NeuronalNetwork.setup: " + "invalid networkInfo type");
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class NeuronalNetwork {
 
 	public void run(double currentTime){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
-			// need to check neuron type
+			// need to check neuron type (do we really?)
 			if (neurons[neuronNumber] instanceof PyramidalNeuron)
 			{
 				PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;

@@ -35,8 +35,9 @@ public class RunSingleNeuron {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
+		char[] networkData = null ; // holds an array of P for pyramidal or I for inhibitory
 		NeuronInfo[] networkInfo = null ;
-		int numberOfNeurons = 1 ;
+		int numberOfNeurons = 0 ;
 		
 		double [][] contextArray = null ;
 		double [][] drivingArray = null ;
@@ -60,6 +61,7 @@ public class RunSingleNeuron {
 		double inhThreshold = 1 ; // threshold for inhbitory neurons
 		double pyrRefractoryPeriod = 0 ; // default pyramidal RP is no RP
 		double inhRefractoryPeriod = 0 ; // default inhibitory refractory period is 0
+		
 
 
 		int argno = 0 ;
@@ -79,6 +81,11 @@ public class RunSingleNeuron {
 				break ;
 			case "-t": // followed by end time (defaults to 5.0)
 				endTime = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
+			case "-n": // network specifier
+				networkData = readNetworkFromFile(args[argno + 1]) ;
+				numberOfNeurons = networkData.length ;
 				argno = argno + 2 ;
 				break ;
 			case "-wd": // followed by weight file for driving inputs
@@ -143,10 +150,17 @@ public class RunSingleNeuron {
 		// set up the neuronalNetwork with values that go across all neurons
 		NeuronalNetwork NN = new NeuronalNetwork(samplingRate) ;
 		// set up the neuron information, with id = 1 (only 1 for now)
-		networkInfo = new NeuronInfo[2] ;
-		networkInfo[0]  = new PyramidalNeuronInfo(1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
+		networkInfo = new NeuronInfo[numberOfNeurons] ;
+		for (int nno = 0; nno < numberOfNeurons; nno++)
+		{
+			if (networkData[nno] == 'P')
+					networkInfo[nno]  = new PyramidalNeuronInfo(nno + 1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
 				apicalGradient, pyrThreshold, pyrRefractoryPeriod) ;
-		networkInfo[1]  = new InterNeuronInfo(2, samplingRate, tauInhib, inhThreshold, inhRefractoryPeriod) ;
+			else if (networkData[nno] == 'I')
+				networkInfo[nno]  = new InterNeuronInfo(nno + 1, samplingRate, tauInhib, inhThreshold, inhRefractoryPeriod) ;
+			else
+				System.err.println("RunSingleNeuron.main: unidentified neuron type = " + networkData[nno]);
+		}
 		// set up the neural network
 		NN.setup(networkInfo) ;
 		// set up the synapses on this neuron
@@ -190,6 +204,30 @@ public class RunSingleNeuron {
 		NN.displaySpikes();
 		System.out.println("Simulation ended");
 		
+	}
+	
+	private static char[]  readNetworkFromFile(String filename) throws IOException
+	{
+		List<String> InputList = null;
+
+		Path inputFilePath = Paths.get(filename);
+		try {
+			InputList = Files.readAllLines(inputFilePath);
+		} catch (IOException e) {
+			System.err.println("readNetworkFromFile: Caught IOException: " + e.getMessage());
+			System.exit(1);
+		}
+		// have content in InputList
+		char[] returnString = new char[InputList.size()] ;
+		Iterator<String> inputIterator = InputList.iterator();
+		int nno = 0 ;
+		while (inputIterator.hasNext()) {
+			String nextInput = inputIterator.next().trim();
+			String[] inputComponents = nextInput.split("\\s+|,", 2); // allows spaces or single commas as separators
+			returnString[nno] = inputComponents[1].charAt(inputComponents[1].length() - 1) ;
+			nno = nno + 1 ;
+		}
+		return returnString ;
 	}
 	
 	/*
