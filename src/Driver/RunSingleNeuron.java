@@ -48,6 +48,7 @@ public class RunSingleNeuron {
 		
 		double tauBasal = 0.1 ; // time constant for basal compartment
 		double tauApical = 0.1 ; // time constant for apical compartment
+		double tauInhib = 0.2 ; // time constant for inhibitory interneuron single compartment
 		
 		double alphaDriving = 1000 ; // alpha value for driving synapses
 		double alphaContext = 1000 ; // alpha value for contextual synapses
@@ -55,8 +56,10 @@ public class RunSingleNeuron {
 		double apicalMultiplier = 1 ; // multiplier for apical dendrite: output = mult * logistic(gradient * input)
 		double apicalGradient = 1 ;
 		
-		double threshold = 1 ; // threshold for axon hillock
-		double refractoryPeriod = 0 ; // default is no RP
+		double pyrThreshold = 1 ; // threshold for axon hillock
+		double inhThreshold = 1 ; // threshold for inhbitory neurons
+		double pyrRefractoryPeriod = 0 ; // default pyramidal RP is no RP
+		double inhRefractoryPeriod = 0 ; // default inhibitory refractory period is 0
 
 
 		int argno = 0 ;
@@ -96,6 +99,10 @@ public class RunSingleNeuron {
 				tauApical = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
+			case "-t_inhib": // time constant (tau) for simple leaky compartment used in inhibitory neurons
+				tauInhib = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
 			case "-alpha_driver": // alpha value for driving synapses
 				alphaDriving = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
@@ -112,12 +119,20 @@ public class RunSingleNeuron {
 				apicalGradient = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break  ;
-			case "axon_threshold": // axon threshold
-				threshold = Double.parseDouble(args[argno + 1]) ;
+			case "-axon_threshold": // axon threshold
+				pyrThreshold = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break  ;
-			case "refractory_period":
-				refractoryPeriod = Double.parseDouble(args[argno + 1]) ;
+			case "-inhibitory_threshold": // inhibitory neuron threshold
+				inhThreshold = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
+			case "-p_refractory_period": // pyramidal neuron refractory period
+				pyrRefractoryPeriod = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
+			case "-i_refractory_period": // inhibitory neuron refractory period
+				inhRefractoryPeriod = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break  ;
 			default:
@@ -128,9 +143,10 @@ public class RunSingleNeuron {
 		// set up the neuronalNetwork with values that go across all neurons
 		NeuronalNetwork NN = new NeuronalNetwork(samplingRate) ;
 		// set up the neuron information, with id = 1 (only 1 for now)
-		networkInfo = new NeuronInfo[1] ;
+		networkInfo = new NeuronInfo[2] ;
 		networkInfo[0]  = new PyramidalNeuronInfo(1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
-				apicalGradient, threshold, refractoryPeriod) ;
+				apicalGradient, pyrThreshold, pyrRefractoryPeriod) ;
+		networkInfo[1]  = new InterNeuronInfo(2, samplingRate, tauInhib, inhThreshold, inhRefractoryPeriod) ;
 		// set up the neural network
 		NN.setup(networkInfo) ;
 		// set up the synapses on this neuron

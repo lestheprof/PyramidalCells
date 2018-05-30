@@ -9,6 +9,8 @@ import NeuronPackage.*;
 
 /**
  * @author lss
+ * Class to hold the neural network itself. Uses and array of AbstractNeurons. 
+ * Initialised in constructor only to supply sampling rate: otherwise initialised in setup
  *
  */
 public class NeuronalNetwork {
@@ -27,8 +29,14 @@ public class NeuronalNetwork {
 		// interconnection is defined by the internal synapses
 		// defined by a string eventually: for now just a single pyramidal neuron
 		// set up the neurons, with id = 1
-		neurons = new AbstractNeuron[1] ;
-		neurons[0] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[0]) ;
+		neurons = new AbstractNeuron[2] ;
+		for (int nno = 0 ; nno< neurons.length; nno++){
+			if (networkInfo[nno] instanceof PyramidalNeuronInfo)
+				neurons[nno] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[nno]) ;
+			else if (networkInfo[nno] instanceof InterNeuronInfo)
+				neurons[nno] = new InterNeuron((InterNeuronInfo)networkInfo[nno]) ;
+			else System.err.println("NeuronalNetwork.setup: " + "invalie networkInfo type");
+		}
 	}
 	
 	/*
@@ -37,15 +45,21 @@ public class NeuronalNetwork {
 	 */
 	public void setUpExternalDrivingSynapses(double [][] extSynapticWeights, double alpha){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
-			PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
-			pneuron.setUpExternalDrivingSynapses(extSynapticWeights, alpha) ;
+			if (neurons[neuronNumber] instanceof PyramidalNeuron)
+			{
+				PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
+				pneuron.setUpExternalDrivingSynapses(extSynapticWeights, alpha) ;
+			}
 		}
 	}
 	
 	public void setUpExternalContextSynapses(double [][] extSynapticWeights, double alpha){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
-			PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
-			pneuron.setUpExternalContextSynapses(extSynapticWeights, alpha) ;
+			if (neurons[neuronNumber] instanceof PyramidalNeuron)
+			{
+				PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
+				pneuron.setUpExternalContextSynapses(extSynapticWeights, alpha) ;
+			}
 		}
 	}
 	
@@ -54,30 +68,43 @@ public class NeuronalNetwork {
 	 */
 	public void setDrivingInputs(double [][] drivingSpikeTimes){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
-			PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
-			pneuron.setDrivingInputs(drivingSpikeTimes) ;
+			if (neurons[neuronNumber] instanceof PyramidalNeuron)
+			{
+				PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
+				pneuron.setDrivingInputs(drivingSpikeTimes) ;
+			}
 		}	
 		}
 	
 	public void setContextualInputs(double [][] contextualSpikeTimes){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
-			PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
-			pneuron.setContextualInputs(contextualSpikeTimes) ;
+			if (neurons[neuronNumber] instanceof PyramidalNeuron)
+			{
+				PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
+				pneuron.setContextualInputs(contextualSpikeTimes) ;
+			}
 		}	
 		}
 
 	public void run(double currentTime){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
 			// need to check neuron type
-			PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
-			pneuron.run(currentTime) ;
+			if (neurons[neuronNumber] instanceof PyramidalNeuron)
+			{
+				PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
+				pneuron.run(currentTime) ;
+			}
+			else if (neurons[neuronNumber] instanceof InterNeuron)
+			{
+				InterNeuron ineuron = (InterNeuron)  neurons[neuronNumber] ;
+				ineuron.run(currentTime);
+			}
 		}
 	}
 	
 	public void displaySpikes(){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
-			PyramidalNeuron pneuron =  (PyramidalNeuron) neurons[neuronNumber] ;
-			Iterator <Double> spikeIterator = pneuron.spikesOut.iterator();
+			Iterator <Double> spikeIterator = neurons[neuronNumber].spikesOut.iterator(); // spikesOut is in AbstractNeuron 
 			while (spikeIterator.hasNext())
 				System.out.println("Neuron " + neurons[neuronNumber].neuronID + " fired at time "+ spikeIterator.next()) ;
 		}

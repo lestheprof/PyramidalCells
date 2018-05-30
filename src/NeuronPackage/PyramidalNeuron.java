@@ -5,7 +5,6 @@ import SynapsePackage.ExternalSynapse;
 import SynapsePackage.SynapseForm;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class PyramidalNeuron extends AbstractNeuron {
@@ -16,7 +15,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 	public BasalDendrite basalDendrite ;
 	private ExternalSynapse[] extDrivingSynapses ;
 	private ExternalSynapse[] extContextSynapses ;
-	public List<Double> spikesOut = null ;
+	// public List<Double> spikesOut = null ; now in AbstractNeuron
 	
 	private boolean debug = false ;
 	

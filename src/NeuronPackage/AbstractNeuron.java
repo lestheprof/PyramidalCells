@@ -1,9 +1,12 @@
 package NeuronPackage;
 
+import java.util.List;
+
 public abstract class AbstractNeuron {
 public int neuronID ;
 public int samplingRate ;
 public double samplingInterval ;
+public List<Double> spikesOut = null ;
 /*
  * @param ID the (String) identity of this neuron
  */
