@@ -71,12 +71,14 @@ public class PyramidalNeuron extends AbstractNeuron {
 		extDrivingSynapses = new ExternalSynapse[nExtDrivingSynapses] ; // note these are not initialised
 		// set these up in this neuron's BasalDendrite
 		for (int i=0; i<extSynapticWeights.length; i++) {
+			// use only synapses to this neuron
+			if (extSynapticWeights[i][0] == this.neuronID){
 			// create the synapse. Note that synapse id's start at 1
 			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
 			if (synapseNumber > 0)
 			extDrivingSynapses[synapseNumber] = // initialise the synapse
 					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.basalDendrite, i+1, alpha) ;
-			
+			}
 		}
 		// associate this synaptic array with the basal dendrite compartment
 		this.basalDendrite.setExternalSynapses(extDrivingSynapses);
@@ -87,25 +89,28 @@ public class PyramidalNeuron extends AbstractNeuron {
 	 * alpha is the alpha value for the temporal distribution of post-synaptic output
 	 */
 	public void setUpExternalContextSynapses(double [][] extSynapticWeights, double alpha){
-		int nExtDrivingSynapses = 0 ;
+		int nExtcontextSynapses = 0 ;
 		for (int index = 0 ; index < extSynapticWeights.length ; index++){
 			// use only synapses to this neuron
 			if (extSynapticWeights[index][0] == this.neuronID){
-			if (nExtDrivingSynapses < (int)(Math.round(extSynapticWeights[index][1])))
-				nExtDrivingSynapses = (int)(Math.round(extSynapticWeights[index][1])) ;
+			if (nExtcontextSynapses < (int)(Math.round(extSynapticWeights[index][1])))
+				nExtcontextSynapses = (int)(Math.round(extSynapticWeights[index][1])) ;
 			}	
 		}
-		nExtDrivingSynapses = nExtDrivingSynapses + 1 ; // because the numbers start at 1. Synapse 0 not used
+		nExtcontextSynapses = nExtcontextSynapses + 1 ; // because the numbers start at 1. Synapse 0 not used
 		// set up an array of external driving synapses
-		extContextSynapses = new ExternalSynapse[nExtDrivingSynapses] ; // note these are not initialised
+		extContextSynapses = new ExternalSynapse[nExtcontextSynapses] ; // note these are not initialised
 		// set these up in this neuron's BasalDendrite
 		for (int i=0; i<extSynapticWeights.length; i++) {
-			// create the synapse. Note that synapse id's start at 1
-			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
-			if (synapseNumber > 0)
-			extContextSynapses[synapseNumber] = // initialise the synapse
-					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.apicalTuft, i+1, alpha) ;
-			
+			// use only synapses to this neuron
+			if (extSynapticWeights[i][0] == this.neuronID) {
+				// create the synapse. Note that synapse id's start at 1
+				int synapseNumber = (int) (Math.round(extSynapticWeights[i][1]));
+				if (synapseNumber > 0)
+					extContextSynapses[synapseNumber] = // initialise thesynapse
+							new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.apicalTuft,
+									i + 1, alpha);
+			}
 		}
 		// associate this synaptic array with the apical tuft
 		this.apicalTuft.setExternalSynapses(extContextSynapses);
