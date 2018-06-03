@@ -77,7 +77,8 @@ public class PyramidalNeuron extends AbstractNeuron {
 			int synapseNumber = (int)(Math.round(extSynapticWeights[i][1])) ;
 			if (synapseNumber > 0)
 			extDrivingSynapses[synapseNumber] = // initialise the synapse
-					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.basalDendrite, i+1, alpha) ;
+					new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, 
+							this.basalDendrite, synapseNumber, alpha) ;
 			}
 		}
 		// associate this synaptic array with the basal dendrite compartment
@@ -109,7 +110,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 				if (synapseNumber > 0)
 					extContextSynapses[synapseNumber] = // initialise thesynapse
 							new ExternalSynapse(extSynapticWeights[i][2], SynapseForm.EXCITATORY, this.apicalTuft,
-									i + 1, alpha);
+									synapseNumber, alpha);
 			}
 		}
 		// associate this synaptic array with the apical tuft
