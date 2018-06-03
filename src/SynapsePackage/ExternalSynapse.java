@@ -35,8 +35,8 @@ public class ExternalSynapse extends AbstractSynapse {
 		// used in runStep to show that an external action potential has arrived here
 		this.spikeTimes = spikeTimes  ;
 		if (debug){
-			System.out.println(targetCompartment.compartmentType) ;
-			System.out.print("Synapse " + synapseID + " spike times " );
+			System.out.print("Neuron id = " + this.neuronID + "." + targetCompartment.compartmentType) ;
+			System.out.print(":  Synapse " + synapseID + " spike times " );
 			for (int spikeNo = 0; spikeNo < spikeTimes.length; spikeNo++)
 				System.out.print(spikeTimes[spikeNo].doubleValue() + " ");
 			System.out.println() ;

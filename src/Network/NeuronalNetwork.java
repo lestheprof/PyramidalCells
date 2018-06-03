@@ -29,7 +29,7 @@ public class NeuronalNetwork {
 		// interconnection is defined by the internal synapses
 		// defined by a string eventually: for now just a single pyramidal neuron
 		// set up the neurons, with id = 1
-		neurons = new AbstractNeuron[2] ;
+		neurons = new AbstractNeuron[networkInfo.length] ;
 		for (int nno = 0 ; nno< neurons.length; nno++){
 			if (networkInfo[nno] instanceof PyramidalNeuronInfo)
 				neurons[nno] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[nno]) ;
