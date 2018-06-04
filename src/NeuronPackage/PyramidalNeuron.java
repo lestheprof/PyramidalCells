@@ -125,14 +125,17 @@ public class PyramidalNeuron extends AbstractNeuron {
 		// inputs are N by 3, namely neuron, synapse, time
 		// use only those with this neuronID
 		// how many are there?
-		int mySpikesNo = 0 ;
+		int mySpikesNo = 0 ; // count local spikes
 		for (int i = 0; i<drivingSpikeTimes.length; i++){
 			if (drivingSpikeTimes[i][0] == this.neuronID) mySpikesNo = mySpikesNo + 1 ;
 		}
 		double [][] myDrivingSpikes  = new double[mySpikesNo][3] ;
+		mySpikesNo = 0 ; // reset local spike count for storing them
 		for (int i = 0; i<drivingSpikeTimes.length; i++){
-			if (drivingSpikeTimes[i][0] == this.neuronID) 
-				myDrivingSpikes[i] = drivingSpikeTimes[i] ;
+			if (drivingSpikeTimes[i][0] == this.neuronID) {
+				myDrivingSpikes[mySpikesNo] = drivingSpikeTimes[i] ;
+				mySpikesNo = mySpikesNo + 1 ;
+			}
 		}
 		// send these to the basal dendrite
 		basalDendrite.setDrivingSpikes(myDrivingSpikes);
@@ -146,14 +149,17 @@ public class PyramidalNeuron extends AbstractNeuron {
 		// inputs are N by 3, namely neuron, synapse, time
 		// use only those with this neuronID
 		// how many are there?
-		int mySpikesNo = 0 ;
+		int mySpikesNo = 0 ; // count local spikes
 		for (int i = 0; i<contextSpikeTimes.length; i++){
 			if (contextSpikeTimes[i][0] == this.neuronID) mySpikesNo = mySpikesNo + 1 ;
 		}
 		double [][] myContextSpikes  = new double[mySpikesNo][3] ;
+		mySpikesNo = 0 ; // reset local spike count for storage
 		for (int i = 0; i<contextSpikeTimes.length; i++){
-			if (contextSpikeTimes[i][0] == this.neuronID) 
-				myContextSpikes[i] = contextSpikeTimes[i] ;
+			if (contextSpikeTimes[i][0] == this.neuronID) { 
+				myContextSpikes[mySpikesNo] = contextSpikeTimes[i] ;
+				mySpikesNo = mySpikesNo + 1 ;
+			}
 		}
 		// send these to the apical tuft
 		apicalTuft.setContextSpikes(myContextSpikes);
