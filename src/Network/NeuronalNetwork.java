@@ -63,6 +63,12 @@ public class NeuronalNetwork {
 		}
 	}
 	
+	public void setUpInternalSynapses(double[][] internalSynapseWeights, double alphaInternalExcitatory,
+			double alphaInternalInhibitory) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	/* 
 	 * set up the inputs
 	 */
@@ -109,5 +115,7 @@ public class NeuronalNetwork {
 				System.out.println("Neuron " + neurons[neuronNumber].neuronID + " fired at time "+ spikeIterator.next()) ;
 		}
 	}
+
+
 
 }

@@ -43,6 +43,7 @@ public class RunSingleNeuron {
 		double [][] drivingArray = null ;
 		double [][] contextSynapseWeights = null ;
 		double [][] drivingSynapseWeights = null ;
+		double [][] internalSynapseWeights = null ;
 		
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
@@ -53,6 +54,8 @@ public class RunSingleNeuron {
 		
 		double alphaDriving = 1000 ; // alpha value for driving synapses
 		double alphaContext = 1000 ; // alpha value for contextual synapses
+		double alphaInternalExcitatory = 900 ; // alpha value for internal excitatory sysnapses
+		double alphaInternalInhibitory = 200 ; // alpha value for internal inhibitory sysnapses
 		
 		double apicalMultiplier = 1 ; // multiplier for apical dendrite: output = mult * logistic(gradient * input)
 		double apicalGradient = 1 ;
@@ -98,6 +101,10 @@ public class RunSingleNeuron {
 				contextSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break  ;
+			case "-wi": // followed by weight file for internal synapses
+				internalSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
+				argno = argno + 2 ;
+				break ;
 			case "-t_basal": // time constant (tau) for basal dendrite
 				tauBasal = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
@@ -116,6 +123,14 @@ public class RunSingleNeuron {
 				break ;
 			case "-alpha_context": // alpha value for contextual synapses	
 				alphaContext = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;	
+			case "-alpha_internal_excitatory": // alpha value for internal excitatory synaposes
+				alphaInternalExcitatory = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;	
+			case "-alpha_internal_inhibitory": // alpha value for internal inhibitory synapses
+				alphaInternalInhibitory = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;	
 			case "-apical_multiplier": // apical multiplier for apical dendrite	
@@ -163,7 +178,8 @@ public class RunSingleNeuron {
 		}
 		// set up the neural network
 		NN.setup(networkInfo) ;
-		// set up the synapses on this neuron
+		
+		// set up the synapses on this network
 		
 		if (contextSynapseWeights != null)
 		{
@@ -184,6 +200,12 @@ public class RunSingleNeuron {
 			System.exit(1);
 		}
 		
+		if (internalSynapseWeights != null)
+		{
+			// set up internal synapse
+			NN.setUpInternalSynapses(internalSynapseWeights, alphaInternalExcitatory, alphaInternalInhibitory);
+		}
+		else System.out.println("No internal synapses provided") ;
 		// store the driving inputs (drivingArray) at the neuron
 		NN.setDrivingInputs(drivingArray);
 		// store the context inputs (contextArray) at the neuron
