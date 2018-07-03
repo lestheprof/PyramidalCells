@@ -43,7 +43,7 @@ public class RunSingleNeuron {
 		double [][] drivingArray = null ;
 		double [][] contextSynapseWeights = null ;
 		double [][] drivingSynapseWeights = null ;
-		double [][] internalSynapseWeights = null ;
+		double [][] internalSynapseWeightsDelays = null ;
 		
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
@@ -101,8 +101,8 @@ public class RunSingleNeuron {
 				contextSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break  ;
-			case "-wi": // followed by weight file for internal synapses
-				internalSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
+			case "-wi": // followed by weight and delay file for internal synapses
+				internalSynapseWeightsDelays = readInputsToArrayFromFile(args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
 				argno = argno + 2 ;
 				break ;
 			case "-t_basal": // time constant (tau) for basal dendrite
@@ -200,10 +200,10 @@ public class RunSingleNeuron {
 			System.exit(1);
 		}
 		
-		if (internalSynapseWeights != null)
+		if (internalSynapseWeightsDelays != null)
 		{
 			// set up internal synapse
-			NN.setUpInternalSynapses(internalSynapseWeights, alphaInternalExcitatory, alphaInternalInhibitory);
+			NN.setUpInternalSynapses(internalSynapseWeightsDelays, alphaInternalExcitatory, alphaInternalInhibitory);
 		}
 		else System.out.println("No internal synapses provided") ;
 		// store the driving inputs (drivingArray) at the neuron
@@ -261,7 +261,9 @@ public class RunSingleNeuron {
 	/*
 	 * Reads the input in to a 2D
 	 * array where the array is N by numPerLine, with each row being input
-	 * (neuron/channel) number, time (seconds)
+	 * (neuron/channel) number, synapse, time (seconds) for external inputs
+	 * neuron number, synapse number, weight for external synapses
+	 * presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay for internal synapses
 	 */
 	{
 		int lineNo = 0;
