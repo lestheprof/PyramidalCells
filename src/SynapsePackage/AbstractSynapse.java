@@ -4,6 +4,7 @@ import CompartmentPackage.AbstractCompartment;
 
 /** 
 	 * abstract synapse type for all sorts of synapses
+	 * compartment and neuron here are post-synaptic 
 	 */
 public abstract class AbstractSynapse {
 	

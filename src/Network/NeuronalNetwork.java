@@ -5,7 +5,10 @@ package Network;
 
 import java.util.Iterator;
 
+import CompartmentPackage.AbstractCompartment;
+import CompartmentPackage.AbstractSpikingCompartment;
 import NeuronPackage.*;
+import SynapsePackage.SynapseForm;
 
 /**
  * @author lss
@@ -63,10 +66,73 @@ public class NeuronalNetwork {
 		}
 	}
 	
-	public void setUpInternalSynapses(double[][] internalSynapseWeights, double alphaInternalExcitatory,
+	/*
+	 * set up the internal synapses
+	 * internalSynapseWeightsDelays contains weights and delays: format is from_neuron, to_neuron, to_compartment, weight, delay
+	 * alphaInternalExcitatory alpha factor for excitatory synapses
+	 * alphaInternalInhibitory alpha factor for inhibitory synapses
+	 */
+	public void setUpInternalSynapses(double[][] internalSynapseWeightsDelays, double alphaInternalExcitatory,
 			double alphaInternalInhibitory) {
-		// TODO Auto-generated method stub
-		
+		SynapseForm stype;
+		int synapseID = 0;
+		double alpha;
+		AbstractCompartment toCompartment = null;
+		// for each spiking compartment that's a presynaptic compartment, call
+		// the method
+		// addOutgoingSynapse
+		// note that index of neuron in neurons array is 1 less than actual neuron identity
+		for (int synapseNo = 0; synapseNo < internalSynapseWeightsDelays.length; synapseNo++) {
+			int fromNeuronIndex = (int) (Math.round(internalSynapseWeightsDelays[synapseNo][0])) - 1;
+			int toNeuronIndex = (int) (Math.round(internalSynapseWeightsDelays[synapseNo][1])) - 1;
+
+			// alpha is different for excitatory and inhibitory synapses
+			if (internalSynapseWeightsDelays[synapseNo][3] < 0) {
+				stype = SynapseForm.INHIBITORY;
+				alpha = alphaInternalInhibitory;
+			} else {
+				stype = SynapseForm.EXCITATORY;
+				alpha = alphaInternalExcitatory;
+			}
+			synapseID = synapseID + 1; // start them at 1
+			// find the toCompartment
+			if (neurons[toNeuronIndex] instanceof InterNeuron)
+				switch ((int) (Math.round(internalSynapseWeightsDelays[synapseNo][2]))) {
+				case 1:
+					toCompartment = ((InterNeuron) neurons[toNeuronIndex]).simpleLeaky;
+					break ;
+				default:
+					System.out.println("NeuronalNetwork:setUpInternalSynapses: invalid synapse to_compartment (Inter Neuron) = " + 
+							(int) (Math.round(internalSynapseWeightsDelays[synapseNo][2])));
+				}
+			else {
+				if (neurons[toNeuronIndex] instanceof PyramidalNeuron) {
+					switch ((int) (Math.round(internalSynapseWeightsDelays[synapseNo][2]))) {
+					case 1:
+						toCompartment = ((PyramidalNeuron) neurons[toNeuronIndex]).basalDendrite;
+						break;
+					case 2:
+						toCompartment = ((PyramidalNeuron) neurons[toNeuronIndex]).apicalTuft;
+						break;
+					case 3:
+						toCompartment = ((PyramidalNeuron) neurons[toNeuronIndex]).apicalDendrite;
+						break;
+					case 4:
+						toCompartment = ((PyramidalNeuron) neurons[toNeuronIndex]).axonHillock;
+						break;
+					default:
+						System.out.println("NeuronalNetwork:setUpInternalSynapses: invalid synapse to_compartment (Pyramidal Neuron) = " + 
+								(int) (Math.round(internalSynapseWeightsDelays[synapseNo][2])));
+					}
+				}
+			}
+
+			neurons[fromNeuronIndex].getSpikingCompartment().addOutgoingSynapse(internalSynapseWeightsDelays[synapseNo][3],
+					internalSynapseWeightsDelays[synapseNo][4], stype, neurons[fromNeuronIndex].getSpikingCompartment(),
+					toCompartment, 
+					synapseID, alpha);
+		}
+
 	}
 	
 	/* 

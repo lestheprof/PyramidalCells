@@ -6,14 +6,14 @@ import SynapsePackage.InternalSynapse; ;
  * Simple leaky compartment, with leak tauInhib, threshold of 1.
  * 
  */
-public class SimpleLeaky extends AbstractCompartment {
+public class SimpleLeaky extends AbstractSpikingCompartment {
 	public double tauInhib ;
 	private InternalSynapse[] intSynapses  = null;
 
 	double activityChange ;
 	double refractoryPeriod ;
 	double threshold = 1 ;
-	private double lastSpikeTime = -1 ; // -ve to show no previous spikes
+	// private double lastSpikeTime = -1 ; // -ve to show no previous spikes: now in AbstractSpikingCompartment
 	private double resetValue = 0 ; // reset value for activation after spiking
 
 

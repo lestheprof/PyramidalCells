@@ -9,11 +9,11 @@ import NeuronPackage.PyramidalNeuron;
  * @author lss
  *
  */
-public class AxonHillock extends AbstractCompartment {
+public class AxonHillock extends AbstractSpikingCompartment {
 
 private double threshold ;
 private double resetValue = 0 ;
-private double lastSpikeTime = -1 ; // -ve to show no previous spikes
+// private double lastSpikeTime = -1 ; // -ve to show no previous spikes: now in AbstractSpikingCompartment
 public double refractoryPeriod = 0.02 ;
 	/**
 	 * neuron is the Pyramidal neuron object to which this axon hillock belongs

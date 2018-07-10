@@ -4,6 +4,7 @@
 package CompartmentPackage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import NeuronPackage.PyramidalNeuron;
@@ -17,7 +18,7 @@ public class BasalDendrite extends AbstractCompartment {
 
 	public double tauBasal ; // time constant for this compartment
 	private ExternalSynapse[]  extSynapses  = null;
-	private InternalSynapse[] intSynapses  = null;
+	// private InternalSynapse[] intSynapses  = null; now in AbstractSynapse
 	public double internalActivation ;
 	public double externalActivation ;
 	double activityChange ;
@@ -42,8 +43,6 @@ public class BasalDendrite extends AbstractCompartment {
 		this.extSynapses = extSynapses ;
 	}
 	
-	public void setInternalSynapses(InternalSynapse[] intSynapses){		
-	}
 
 	public void setDrivingSpikes(double[][] drivingSpikes){
 		// these need to be associated with the correct external synapse
@@ -66,12 +65,13 @@ public class BasalDendrite extends AbstractCompartment {
 		double internalActivation = 0;
 		double externalActivation = 0 ;
 		
+		Iterator<InternalSynapse> synIterator;
 		// internal synapses
-		if (!(intSynapses == null)) // if there's no internal synapses
-		for (int synapseNo = 1 ; synapseNo < intSynapses.length; synapseNo ++)
-		{
-			internalActivation = internalActivation + intSynapses[synapseNo].runStep(currentTime) ;
-		}
+		if (!(incomingSynapses == null)) {// if there's internal synapses
+			synIterator = incomingSynapses.iterator();
+			while (synIterator.hasNext())
+				internalActivation = internalActivation + synIterator.next().runStep(currentTime);
+			}
 		if (!(extSynapses == null)) // if there's no external synapses
 		for (int synapseNo = 1 ; synapseNo < extSynapses.length; synapseNo ++)
 		{

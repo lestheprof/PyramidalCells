@@ -1,6 +1,10 @@
 package CompartmentPackage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import NeuronPackage.AbstractNeuron;
+import SynapsePackage.InternalSynapse;
 
 public abstract class AbstractCompartment {
 
@@ -10,6 +14,8 @@ public abstract class AbstractCompartment {
 	public double samplingInterval ;
 	public int samplingrate ;
 	public String compartmentType = null ;
+	
+	protected List <InternalSynapse> incomingSynapses  = null;
 	
 	public AbstractCompartment(AbstractNeuron neuron, int compartmentID) {
 		// TODO Auto-generated constructor stub
@@ -22,6 +28,13 @@ public abstract class AbstractCompartment {
 	
 	public int getNeuronID(){
 		return myNeuron.neuronID ;
+	}
+	
+	public void addIncomingSynapse(InternalSynapse syn){
+		if (incomingSynapses == null)
+			// create the arraylist
+			incomingSynapses = new ArrayList<InternalSynapse>() ;
+		incomingSynapses.add(syn) ;
 	}
 	
 	/*

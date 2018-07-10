@@ -5,6 +5,7 @@ package NeuronPackage;
 
 import java.util.ArrayList;
 
+import CompartmentPackage.AbstractSpikingCompartment;
 import CompartmentPackage.ApicalDendrite;
 import CompartmentPackage.ApicalTuft;
 import CompartmentPackage.AxonHillock;
@@ -28,7 +29,9 @@ public class InterNeuron extends AbstractNeuron {
 		// initialise output spikes
 		this.spikesOut = new ArrayList<> () ;
 		// create the single compartment for this neuron
-		this.simpleLeaky = new SimpleLeaky(this, 1, tauInhibitory, refractoryPeriod) ;		
+		this.simpleLeaky = new SimpleLeaky(this, 1, tauInhibitory, refractoryPeriod) ;	
+		this.spikingCompartment = this.simpleLeaky ;
+		this.spikesOut = new ArrayList<> () ;
 	}
 	
 	/*
@@ -38,8 +41,8 @@ public class InterNeuron extends AbstractNeuron {
 		super(i1.identity, i1.samplingRate);
 // set up the compartment of this neuron
 		this.simpleLeaky = new SimpleLeaky(this, 1, i1.tauInhib, i1.refractoryPeriod) ;
+		this.spikingCompartment = this.simpleLeaky ;
 		this.spikesOut = new ArrayList<> () ;
-
 	}
 	
 	public void run(double currentTime){
@@ -49,5 +52,7 @@ public class InterNeuron extends AbstractNeuron {
 			spikesOut.add(currentTime) ; // add to list of spikes
 		}
 	}
+	
+	
 
 }

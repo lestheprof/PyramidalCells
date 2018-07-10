@@ -4,6 +4,9 @@
 package SynapsePackage;
 
 import CompartmentPackage.AbstractCompartment;
+import CompartmentPackage.AbstractSpikingCompartment;
+import NeuronPackage.AbstractNeuron;
+
 
 /**
  * @author lss
@@ -14,18 +17,22 @@ public class InternalSynapse extends AbstractSynapse {
 
 	public double delay ; // synaptic delay (i.e. axon + synapse) in seconds
 	private int delaySamples ; // delay in samples
+	public AbstractSpikingCompartment fromCompartment ;
+	public AbstractNeuron fromNeuron ;
 	/**
 	 * @param weight
 	 * @param stype
 	 * @param compartment
 	 * @param ID
 	 */
-	public InternalSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID, double alpha, double delay) {
-		super(weight, stype, compartment, ID, alpha);
+	public InternalSynapse(double weight,  double delay, SynapseForm stype, AbstractSpikingCompartment fromCompartment, 
+			AbstractCompartment toCompartment, int ID, double alpha) {
+		super(weight, stype, toCompartment, ID, alpha);
 		// initialise internal synapse object variables
+		this.fromCompartment = fromCompartment ;
+		this.fromNeuron = fromCompartment.myNeuron ;
 		this.delay = delay ;
 		this.delaySamples =  (int) Math.ceil(delay * this.samplingrate) ; // delay in sample times
-		// TODO Auto-generated constructor stub
 	}
 	
 	public double runStep(double currentTime){

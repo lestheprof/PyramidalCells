@@ -33,6 +33,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 		this.apicalTuft = new ApicalTuft(this, 2, tauApical) ;
 		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3) ;
 		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod) ;
+		this.spikingCompartment = this.axonHillock ;
 		this.basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
 		this.spikesOut = new ArrayList<> () ;
 
@@ -48,6 +49,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApical) ;
 		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3) ;
 		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod) ;
+		this.spikingCompartment = this.axonHillock ;
 		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal) ;
 		this.spikesOut = new ArrayList<> () ;
 
@@ -196,4 +198,6 @@ public class PyramidalNeuron extends AbstractNeuron {
 				System.out.println("time = " + currentTime + " axon Hillock activation = " + axonHillock.activation);
 		}
 	}
+	
+
 }

@@ -4,6 +4,7 @@
 package CompartmentPackage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import NeuronPackage.PyramidalNeuron;
@@ -17,7 +18,7 @@ public class ApicalTuft extends AbstractCompartment {
 
 	public double tauApical ; // time constant
 	private ExternalSynapse[] extSynapses  = null;
-	private InternalSynapse[] intSynapses  = null;
+	// private InternalSynapse[] intSynapses  = null; now in AbstractCompartment
 	
 	public double internalActivation ;
 	public double externalActivation ;
@@ -44,9 +45,6 @@ public class ApicalTuft extends AbstractCompartment {
 		this.extSynapses = extSynapses ;
 	}
 	
-	public void setInternalSynapses(InternalSynapse[] intSynapses){		
-	}
-	
 	public void setContextSpikes(double[][] contextSpikes){
 		// these need to be associated with the correct external synapse
 		// each driving spike is neuron, synapse, time
@@ -68,12 +66,14 @@ public class ApicalTuft extends AbstractCompartment {
 				double internalActivation = 0;
 				double externalActivation = 0 ;
 				
+				// internal incoming synapses
+				Iterator<InternalSynapse> synIterator;
 				// internal synapses
-				if (!(intSynapses == null)) // if there's no internal synapses
-				for (int synapseNo = 1 ; synapseNo < intSynapses.length; synapseNo ++)
-				{
-					internalActivation = internalActivation + intSynapses[synapseNo].runStep(currentTime) ;
-				}
+				if (!(incomingSynapses == null)) {// if there's internal synapses
+					synIterator = incomingSynapses.iterator();
+					while (synIterator.hasNext())
+						internalActivation = internalActivation + synIterator.next().runStep(currentTime);
+					}
 				if (!(extSynapses == null)) // if there's no external synapses
 				for (int synapseNo = 1 ; synapseNo < extSynapses.length; synapseNo ++)
 				{
