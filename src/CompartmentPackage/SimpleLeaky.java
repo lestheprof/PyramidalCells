@@ -29,8 +29,6 @@ public class SimpleLeaky extends AbstractSpikingCompartment {
 		 this.activityChange = Math.exp(- neuron.samplingInterval / tauInhib) ; // pre-calculate amount by which activation decreases each time interval	
 	}
 	
-	public void setInternalSynapses(InternalSynapse[] intSynapses){		
-	}
 	
 	public boolean runAndSpike(double currentTime){
 		super.run(currentTime) ;
