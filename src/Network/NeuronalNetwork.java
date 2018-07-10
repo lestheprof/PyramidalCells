@@ -12,7 +12,7 @@ import SynapsePackage.SynapseForm;
 
 /**
  * @author lss
- * Class to hold the neural network itself. Uses and array of AbstractNeurons. 
+ * Class to hold the neural network itself. Uses an array of AbstractNeurons. 
  * Initialised in constructor only to supply sampling rate: otherwise initialised in setup
  *
  */

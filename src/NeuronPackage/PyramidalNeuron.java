@@ -188,11 +188,13 @@ public class PyramidalNeuron extends AbstractNeuron {
 		if (axonHillock.runAndSpike(currentTime)) // attempt to generate output spikes
 		{
 			// spike has been generated
+			this.justSpiked = true ;
 			spikesOut.add(currentTime) ; // add to list of spikes
 			// but what else?
 			// reset the activation of the Basal Dendrite
 			basalDendrite.activation = 0 ;
 		}
+		else this.justSpiked = false ;
 		if (debug){
 			if (axonHillock.activation > 0)
 				System.out.println("time = " + currentTime + " axon Hillock activation = " + axonHillock.activation);

@@ -3,6 +3,10 @@
  */
 package SynapsePackage;
 
+import java.util.List;
+import java.util.ArrayList ;
+import java.util.Iterator;
+
 import CompartmentPackage.AbstractCompartment;
 import CompartmentPackage.AbstractSpikingCompartment;
 import NeuronPackage.AbstractNeuron;
@@ -19,6 +23,8 @@ public class InternalSynapse extends AbstractSynapse {
 	private int delaySamples ; // delay in samples
 	public AbstractSpikingCompartment fromCompartment ;
 	public AbstractNeuron fromNeuron ;
+	public List <Integer> incomingSpikeSampleTimes = null ;
+
 	/**
 	 * @param weight
 	 * @param stype
@@ -33,10 +39,42 @@ public class InternalSynapse extends AbstractSynapse {
 		this.fromNeuron = fromCompartment.myNeuron ;
 		this.delay = delay ;
 		this.delaySamples =  (int) Math.ceil(delay * this.samplingrate) ; // delay in sample times
+		this.incomingSpikeSampleTimes = new ArrayList <Integer> ();
 	}
 	
 	public double runStep(double currentTime){
-		return 0 ; // for now
+		int currentSample = ((int) Math.round(currentTime * samplingrate) ); // current time in samples
+		// have we just had a presynaptic spike?
+		if (fromNeuron.justSpiked){
+			//add to list of spiking times
+			Integer currentSampleTime = new Integer (currentSample) ;
+			incomingSpikeSampleTimes.add(currentSampleTime) ;
+		}
+		// if there are spikes in the buffer calculate postsynaptic effect
+		if (incomingSpikeSampleTimes.size() == 0)
+			return 0 ;
+		else{
+			// list is nonempty
+			double psp = 0 ;
+			// traverse list adding in the contribution from each spike in it
+			Iterator <Integer> iter = incomingSpikeSampleTimes.iterator() ;
+			while (iter.hasNext()){
+				Integer currentSpike = iter.next() ;
+				if ((currentSample - currentSpike) < delaySamples){
+					// do nothing: inside delay
+				}
+				else if ((currentSample - (currentSpike + delaySamples)) < alphaArrayLength){
+					//inside alpha function
+					alphaIndex = (currentSample - (currentSpike + delaySamples)) ;
+					psp = psp + alphaArray[alphaIndex] * this.weight ;
+				}
+				else if ((currentSample - (currentSpike + delaySamples + alphaArrayLength) > 0))
+					// remove expired spikes
+					iter.remove();
+			}
+			// remove elements from list that have expired
+			return psp ;
+		}
 	}
 
 }

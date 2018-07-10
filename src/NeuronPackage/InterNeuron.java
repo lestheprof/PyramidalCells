@@ -49,8 +49,10 @@ public class InterNeuron extends AbstractNeuron {
 		if (simpleLeaky.runAndSpike(currentTime)) // attempt to generate output spikes
 		{
 			// spike has been generated
+			this.justSpiked = true ;
 			spikesOut.add(currentTime) ; // add to list of spikes
 		}
+		else this.justSpiked = false ;
 	}
 	
 	
