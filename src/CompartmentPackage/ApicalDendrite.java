@@ -18,7 +18,11 @@ public double gradient = 1 ;
 
 // output is multiplier * logistic(gradient * input)
 	/**
-	 * neuron is the Pyramidal neuron object to which this apical dendrite belongs
+	 * apical dendrite will enable interaction between apical tuft and basal dendrite
+	 * @param neuron id of this neuron
+	 * @param multiplier parameter to transfer function
+	 * @param gradient parameter to transfer function
+	 * @param id id of this compartment
 	 */
 	public ApicalDendrite(PyramidalNeuron neuron, double multiplier, double gradient,int id) {
 		super(neuron, id) ; // so compartment knows its neuron id and its own id
@@ -28,6 +32,7 @@ public double gradient = 1 ;
 		// TODO Auto-generated constructor stub
 	}
 	
+
 	public void run(double currentTime){
 		PyramidalNeuron neuron = (PyramidalNeuron) this.myNeuron ;
 		// apply a logistic here to get a numeric output to be used to modify basal input to axon hillock.

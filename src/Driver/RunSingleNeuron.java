@@ -32,7 +32,7 @@ public class RunSingleNeuron {
 
 	/**
 	 * @param args: -f filename for source of external spikes
-	 * @throws IOException 
+	 * @throws IOException for file not found
 	 */
 	public static void main(String[] args) throws IOException {
 		char[] networkData = null ; // holds an array of P for pyramidal or I for inhibitory

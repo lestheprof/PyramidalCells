@@ -8,7 +8,7 @@ import SynapsePackage.InternalSynapse; ;
  */
 public class SimpleLeaky extends AbstractSpikingCompartment {
 	public double tauInhib ;
-	private InternalSynapse[] intSynapses  = null;
+	//private InternalSynapse[] intSynapses  = null;
 
 	double activityChange ;
 	double refractoryPeriod ;
@@ -17,7 +17,13 @@ public class SimpleLeaky extends AbstractSpikingCompartment {
 	private double resetValue = 0 ; // reset value for activation after spiking
 
 
-
+/**
+ * 
+ * @param neuron Neuron to which this compartment belongs
+ * @param compartmentID ID of this simple leaky compartment
+ * @param tauInhib  tau value for this leaky compartment
+ * @param refractoryPeriod  refractory period in seconds
+ */
 	public SimpleLeaky(InterNeuron neuron, int compartmentID, double tauInhib, double refractoryPeriod) {
 		super(neuron, compartmentID);
 		this.tauInhib = tauInhib ;
@@ -29,15 +35,21 @@ public class SimpleLeaky extends AbstractSpikingCompartment {
 		 this.activityChange = Math.exp(- neuron.samplingInterval / tauInhib) ; // pre-calculate amount by which activation decreases each time interval	
 	}
 	
-	
+	/**
+	 * 
+	 * @param currentTime time of this instant of running
+	 * @return true of a spike generated, otherwise false
+	 */
 	public boolean runAndSpike(double currentTime){
 		super.run(currentTime) ;
 		double internalActivation = 0 ;
-		if (!(intSynapses == null)) // if there's no internal synapses
-		for (int synapseNo = 1 ; synapseNo < intSynapses.length; synapseNo ++)
-		{
-			internalActivation = internalActivation + intSynapses[synapseNo].runStep(currentTime) ;
-		}
+		if (!(incomingSynapses == null)) {// if there's no internal synapses
+			// iterate through the incoming synapses
+			for (int synapseNo = 0 ; synapseNo < incomingSynapses.size(); synapseNo ++)
+			{
+				internalActivation = internalActivation + incomingSynapses.get(synapseNo).runStep(currentTime) ;
+			}
+		}	
 		// calculate activation with leak
 		this.activation = (this.activation * this.activityChange) + internalActivation  ;
 		if (this.activation > this.threshold)

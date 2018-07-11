@@ -25,9 +25,12 @@ public class BasalDendrite extends AbstractCompartment {
 	
 	private boolean debug = true ;
 	
-	/**
-	 * neuron is the Pyramidal neuron object to which this basal dendrite belongs
-	 */
+/**
+ * 
+ * @param neuron neuron is the Pyramidal neuron object to which this basal dendrite belongs
+ * @param id id of this compartment
+ * @param tauBasal tau value for leakage of this compartment
+ */
 	public BasalDendrite(PyramidalNeuron neuron, int id, double tauBasal) {
 		super(neuron, id) ; // so compartment knows its neuron id and its own id
 		this.tauBasal = tauBasal ;

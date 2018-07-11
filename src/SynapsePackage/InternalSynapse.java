@@ -24,12 +24,16 @@ public class InternalSynapse extends AbstractSynapse {
 	public AbstractSpikingCompartment fromCompartment ;
 	public AbstractNeuron fromNeuron ;
 	public List <Integer> incomingSpikeSampleTimes = null ;
+	private boolean debug = true ;
 
 	/**
-	 * @param weight
-	 * @param stype
-	 * @param compartment
-	 * @param ID
+	 * @param weight weight of synapse
+	 * @param delay delay of synapse (i seconds)
+	 * @param stype synapse type
+	 * @param fromCompartment presynaptic compartment: must be a spiking compartment
+	 * @param toCompartment postsynaptic compartment
+	 * @param ID ID of this synapse
+	 * @param alpha alpha for this synapse
 	 */
 	public InternalSynapse(double weight,  double delay, SynapseForm stype, AbstractSpikingCompartment fromCompartment, 
 			AbstractCompartment toCompartment, int ID, double alpha) {
@@ -40,8 +44,15 @@ public class InternalSynapse extends AbstractSynapse {
 		this.delay = delay ;
 		this.delaySamples =  (int) Math.ceil(delay * this.samplingrate) ; // delay in sample times
 		this.incomingSpikeSampleTimes = new ArrayList <Integer> ();
+		if (debug)
+		System.out.println("Internal synapse created: from neuron=" + fromNeuron.neuronID + 
+				" Compartment=" + fromCompartment.compartmentID + " to Neuron=" + this.neuronID + " Compartment=" + this.compartmentID);
 	}
 	
+	/**
+	 * @param currentTime current time in seconds
+	 * @return returns a double, giving the post-synaptic potential
+	 */
 	public double runStep(double currentTime){
 		int currentSample = ((int) Math.round(currentTime * samplingrate) ); // current time in samples
 		// have we just had a presynaptic spike?

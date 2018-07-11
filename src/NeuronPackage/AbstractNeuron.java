@@ -11,8 +11,10 @@ public double samplingInterval ;
 public List<Double> spikesOut = null ;
 public boolean justSpiked ; // true only if neuron has spiked this sample
 public AbstractSpikingCompartment spikingCompartment ;
+
 /*
- * @param ID the (String) identity of this neuron
+ * @param ID the (int) identity of this neuron
+ * @param samplingRate sampling rate of the simulation 
  */
 	public AbstractNeuron(int ID, int samplingRate) {
 		this.neuronID = ID ;

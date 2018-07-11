@@ -15,12 +15,13 @@ public class ExternalSynapse extends AbstractSynapse {
 	private int spikeTimeIndex;
 	private boolean inspike ;// set when we are inside the alpha function
 	private boolean debug = true ;
+	
 	/**
-	 * @param weight
-	 * @param stype
-	 * @param compartment
-	 * @param ID
-	 * @param alpha
+	 * @param weight weight for thissynapse
+	 * @param stype type of synapse: see SynapseForm
+	 * @param compartment target (postsynaptic) compartment for this synapse
+	 * @param ID identity number
+	 * @param alpha alpha value
 	 */
 	public ExternalSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, int ID, double alpha) {
 		super(weight, stype, compartment, ID, alpha);

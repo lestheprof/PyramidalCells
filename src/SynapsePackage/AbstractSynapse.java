@@ -35,6 +35,7 @@ public abstract class AbstractSynapse {
 		 * @param stype nature of synapse (from SynapseForm.java)
 		 * @param compartment the compartment which this synapse targets
 		 * @param synapseID synapse identity (starts at 1)
+		 * @param alpha alpha value for this synapse
 		 */
 	public AbstractSynapse(double weight, SynapseForm stype, AbstractCompartment compartment, 
 			int synapseID, double alpha) {
@@ -54,7 +55,7 @@ public abstract class AbstractSynapse {
 			setupAlphaArray() ; // set up the array for transferring synaptic outputs. Note that this sums to 1.
 	}
 	
-	/*
+	/**
 	 * Set up the alpha array
 	 */
 	public void setupAlphaArray() {

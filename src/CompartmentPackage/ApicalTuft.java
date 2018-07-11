@@ -27,8 +27,9 @@ public class ApicalTuft extends AbstractCompartment {
 
 	
 	/**
-	 * neuron is the Pyramidal neuron object to which this apical tuft belongs
-	 * tauApical is time constant for this compartment
+	 * @param neuron is the Pyramidal neuron object to which this apical tuft belongs
+	 * @param id identity of this compartment
+	 * @param tauApical is time constant for this compartment
 	 */
 	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApical) {
 		super(neuron, id) ; // so compartment knows its neuron id and its own id

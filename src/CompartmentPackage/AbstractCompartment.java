@@ -17,6 +17,11 @@ public abstract class AbstractCompartment {
 	
 	protected List <InternalSynapse> incomingSynapses  = null;
 	
+	/**
+	 * 
+	 * @param neuron neuron to which this compartment belongs
+	 * @param compartmentID ID of this compartment
+	 */
 	public AbstractCompartment(AbstractNeuron neuron, int compartmentID) {
 		// TODO Auto-generated constructor stub
 		this.activation = 0 ; // initialise the activation, here in this abstract version, to 0
@@ -30,6 +35,10 @@ public abstract class AbstractCompartment {
 		return myNeuron.neuronID ;
 	}
 	
+	/**
+	 * add an incoming synapse to this compartment: these are internal synapses
+	 * @param syn synapse object
+	 */
 	public void addIncomingSynapse(InternalSynapse syn){
 		if (incomingSynapses == null)
 			// create the arraylist
@@ -39,6 +48,7 @@ public abstract class AbstractCompartment {
 	
 	/*
 	 * CurrentTime current simulation time
+	 * null: called by subclasses
 	 */
 	public void run(double currentTime){
 	}

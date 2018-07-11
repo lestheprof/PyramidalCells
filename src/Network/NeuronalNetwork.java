@@ -20,13 +20,18 @@ public class NeuronalNetwork {
 
 	public int samplingRate ; 
 	public AbstractNeuron[] neurons ;
-	/**
-	 * 
-	 */
+	
+/**
+ * set sampling rate
+ * @param samplingRate global sampling rate
+ */
 	public NeuronalNetwork(int samplingRate) {
 		this.samplingRate = samplingRate ;
 	}
-	
+	/**
+	 * 
+	 * @param networkInfo array of information about each neuron in the network
+	 */
 	public void setup(NeuronInfo[] networkInfo){
 		// setup the network: that is, create the neurons
 		// interconnection is defined by the internal synapses
@@ -42,9 +47,11 @@ public class NeuronalNetwork {
 		}
 	}
 	
-	/*
+	
+	/**
 	 * set up external connections to driving synapses
-	 *
+	 * @param extSynapticWeights 2D array of externally connected weights
+	 * @param alpha fixed value of alpha for all external weights
 	 */
 	public void setUpExternalDrivingSynapses(double [][] extSynapticWeights, double alpha){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
@@ -56,6 +63,11 @@ public class NeuronalNetwork {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param extSynapticWeights 2D array of external connected weights
+	 * @param alpha fixed value of alpha for all of these
+	 */
 	public void setUpExternalContextSynapses(double [][] extSynapticWeights, double alpha){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
 			if (neurons[neuronNumber] instanceof PyramidalNeuron)
@@ -135,9 +147,10 @@ public class NeuronalNetwork {
 
 	}
 	
-	/* 
-	 * set up the inputs
-	 */
+/**
+ * set up the drivinginputs
+ * @param drivingSpikeTimes 2D array drivingSpikeTimes times from external to the system
+ */
 	public void setDrivingInputs(double [][] drivingSpikeTimes){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
 			if (neurons[neuronNumber] instanceof PyramidalNeuron)
@@ -147,7 +160,10 @@ public class NeuronalNetwork {
 			}
 		}	
 		}
-	
+	/**
+	 * set up the contextual inputs
+	 * @param contextualSpikeTimes 2D array of external contextual inputs
+	 */
 	public void setContextualInputs(double [][] contextualSpikeTimes){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
 			if (neurons[neuronNumber] instanceof PyramidalNeuron)
@@ -157,7 +173,10 @@ public class NeuronalNetwork {
 			}
 		}	
 		}
-
+/**
+ * run the simulation for one time step
+ * @param currentTime time of current timestep
+ */
 	public void run(double currentTime){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
 			// need to check neuron type (do we really?)
@@ -174,6 +193,9 @@ public class NeuronalNetwork {
 		}
 	}
 	
+	/**
+	 * display all firing times at end of simulation
+	 */
 	public void displaySpikes(){
 		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
 			Iterator <Double> spikeIterator = neurons[neuronNumber].spikesOut.iterator(); // spikesOut is in AbstractNeuron 

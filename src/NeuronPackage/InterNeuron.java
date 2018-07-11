@@ -21,8 +21,12 @@ public class InterNeuron extends AbstractNeuron {
 	public SimpleLeaky simpleLeaky ;
 	
 	/**
-	 * @param ID
-	 * @param samplingRate
+	 * 
+	 * @param ID id of this inhibitory interneuron
+	 * @param samplingRate sampling rate
+	 * @param tauInhibitory tau value for the compartment that will implement this inhibitory interneuron
+	 * @param threshold threshold for neuron
+	 * @param refractoryPeriod refractory period in seconds
 	 */
 	public InterNeuron(int ID, int samplingRate, double tauInhibitory,  double threshold, double refractoryPeriod) {
 		super(ID, samplingRate);

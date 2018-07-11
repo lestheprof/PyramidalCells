@@ -15,9 +15,13 @@ private double threshold ;
 private double resetValue = 0 ;
 // private double lastSpikeTime = -1 ; // -ve to show no previous spikes: now in AbstractSpikingCompartment
 public double refractoryPeriod = 0.02 ;
-	/**
-	 * neuron is the Pyramidal neuron object to which this axon hillock belongs
-	 */
+/**
+ * 
+ * @param neuron neuron is the Pyramidal neuron object to which this axon hillock belongs
+ * @param id id of this compartment
+ * @param threshold threshold for firing
+ * @param refractoryPeriod in seconds
+ */
 	public AxonHillock(PyramidalNeuron neuron, int id, double threshold, double refractoryPeriod) {
 		super(neuron, id) ; // so compartment knows its neuron id and its own id
 		compartmentType = "Axon Hillock Compartment" ;
@@ -27,7 +31,7 @@ public double refractoryPeriod = 0.02 ;
 	
 	/**
 	 * @param currentTime simulation time
-	 * @return currently always false
+	 * @return true if a spike occurs
 	 */
 	public Boolean runAndSpike(double currentTime){
 		PyramidalNeuron neuron = (PyramidalNeuron) this.myNeuron ;
