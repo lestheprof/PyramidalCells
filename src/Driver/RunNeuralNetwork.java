@@ -22,7 +22,7 @@ import java.nio.file.Paths;
  * @author lss
  *
  */
-public class RunSingleNeuron {
+public class RunNeuralNetwork {
 
 	/**
 	 * 

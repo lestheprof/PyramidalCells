@@ -5,11 +5,6 @@ package NeuronPackage;
 
 import java.util.ArrayList;
 
-import CompartmentPackage.AbstractSpikingCompartment;
-import CompartmentPackage.ApicalDendrite;
-import CompartmentPackage.ApicalTuft;
-import CompartmentPackage.AxonHillock;
-import CompartmentPackage.BasalDendrite;
 import CompartmentPackage.SimpleLeaky;
 
 /**

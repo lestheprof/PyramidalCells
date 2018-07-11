@@ -6,7 +6,6 @@ package Network;
 import java.util.Iterator;
 
 import CompartmentPackage.AbstractCompartment;
-import CompartmentPackage.AbstractSpikingCompartment;
 import NeuronPackage.*;
 import SynapsePackage.SynapseForm;
 

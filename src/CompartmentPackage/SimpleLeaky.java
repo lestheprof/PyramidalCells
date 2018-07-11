@@ -1,7 +1,6 @@
 package CompartmentPackage;
 
-import NeuronPackage.InterNeuron;
-import SynapsePackage.InternalSynapse; ;
+import NeuronPackage.InterNeuron; 
 /*
  * Simple leaky compartment, with leak tauInhib, threshold of 1.
  * 
