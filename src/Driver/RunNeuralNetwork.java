@@ -44,6 +44,7 @@ public class RunNeuralNetwork {
 		double [][] contextSynapseWeights = null ;
 		double [][] drivingSynapseWeights = null ;
 		double [][] internalSynapseWeightsDelays = null ;
+		String spikeOutFileName = null ;
 		
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
@@ -103,6 +104,10 @@ public class RunNeuralNetwork {
 				break  ;
 			case "-wi": // followed by weight and delay file for internal synapses
 				internalSynapseWeightsDelays = readInputsToArrayFromFile(args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
+				argno = argno + 2 ;
+				break ;
+			case "-sout": // followed by spike output file name
+				spikeOutFileName = new String(args[argno + 1]);
 				argno = argno + 2 ;
 				break ;
 			case "-t_basal": // time constant (tau) for basal dendrite
@@ -223,6 +228,11 @@ public class RunNeuralNetwork {
 		}
 		// generated spikes are in neuron.spikesOut
 		System.out.println("Spikes generated:");
+		// save spikes to  file here
+		if (spikeOutFileName != null)
+		{
+			// save spikes to spikeOutFileName file using a method in NeuralNetwork
+		}
 		NN.displaySpikes();
 		System.out.println("Simulation ended");
 		
