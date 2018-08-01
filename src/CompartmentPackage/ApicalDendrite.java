@@ -11,6 +11,8 @@ import NeuronPackage.PyramidalNeuron;
  * Implements an apical dendrite which takes the activation of the apical tuft as input (from this.myNeuron) 
  * and runs it through multiplier * logistic(gradient * input) to produce a value (activation) between 0 and multiplier which
  * will be used to modulate the effect of the basal dendrite's activation at the axon hillock.
+ * Does not currently use synapses, though synapses can target this compartment because of the code in
+ * AbstractCompartment: add code to run method to use them.
  */
 public class ApicalDendrite extends AbstractCompartment {
 public double multiplier = 1 ;  
