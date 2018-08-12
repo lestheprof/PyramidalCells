@@ -4,6 +4,8 @@
 package Network;
 
 import java.util.Iterator;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import CompartmentPackage.AbstractCompartment;
 import NeuronPackage.*;
@@ -202,6 +204,39 @@ public class NeuronalNetwork {
 				System.out.println("Neuron " + neurons[neuronNumber].neuronID + " fired at time "+ spikeIterator.next()) ;
 		}
 	}
+	
+	/**
+	 * Writes all spikes to a file, csv format
+	 * @param filename String name of file to be written to
+	 */
+	public void writeSpikes(String fileName) {
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(fileName);
+			for (int neuronNumber = 0; neuronNumber < neurons.length; neuronNumber++) {
+				Iterator<Double> spikeIterator = neurons[neuronNumber].spikesOut.iterator(); // spikesOut
+																								// is
+																								// in
+																								// AbstractNeuron
+				while (spikeIterator.hasNext()) { // write a line of the file
+					fileWriter.append(String.valueOf(neurons[neuronNumber].neuronID));
+					fileWriter.append(",");
+					fileWriter.append(String.valueOf(spikeIterator.next()));
+					fileWriter.append("\n");
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println("NeuronalNetwork:writeSpikes error writing file " + fileName);
+		} finally {
+			try {
+				fileWriter.flush(); // flush and close file
+				fileWriter.close();
+			} catch (IOException e) {
+				System.out.println("Error while flushing/closing fileWriter !!!");
+			}
+		}
+	} // writeSpikes
 
 
 

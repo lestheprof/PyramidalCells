@@ -106,7 +106,7 @@ public class RunNeuralNetwork {
 				internalSynapseWeightsDelays = readInputsToArrayFromFile(args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
 				argno = argno + 2 ;
 				break ;
-			case "-sout": // followed by spike output file name
+			case "-sout": // followed by spike output file name: will be csv, <neuron, time>
 				spikeOutFileName = new String(args[argno + 1]);
 				argno = argno + 2 ;
 				break ;
@@ -232,6 +232,9 @@ public class RunNeuralNetwork {
 		if (spikeOutFileName != null)
 		{
 			// save spikes to spikeOutFileName file using a method in NeuralNetwork
+			// format should be the same as for the driving or context spikes. 
+			// but there's no synapse number, just <neuron><time>, .csv format for maximal ease of reuse. 
+			NN.writeSpikes(spikeOutFileName);
 		}
 		NN.displaySpikes();
 		System.out.println("Simulation ended");
