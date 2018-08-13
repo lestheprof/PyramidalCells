@@ -212,9 +212,11 @@ public class RunNeuralNetwork {
 		}
 		else System.out.println("No internal synapses provided") ;
 		// store the driving inputs (drivingArray) at the neuron
+		// can we assume that there are driving inputs?
 		NN.setDrivingInputs(drivingArray);
-		// store the context inputs (contextArray) at the neuron
-		NN.setContextualInputs(contextArray);
+		// store the context inputs (contextArray) at the neuron unless it's null
+		if (contextArray != null)
+			NN.setContextualInputs(contextArray);
 		
 		// simulation loop
 		currentTime = 0 ; // start at 0
@@ -287,7 +289,7 @@ public class RunNeuralNetwork {
 		InputList = Files.readAllLines(inputFilePath);
 		} catch (IOException e)
 		{
-			System.err.println("readInputsToArrayFromFile: Caught IOException: " + e.getMessage());
+			System.err.println("readInputsToArrayFromFile: File= " + filename + " Caught IOException: " + e.getMessage());
 			System.exit(1); 
 		}
 
@@ -302,7 +304,7 @@ public class RunNeuralNetwork {
 				inputArray[lineNo][i] = Double.parseDouble(inputComponents[i]);
 				} catch (NumberFormatException e)
 				{
-					System.err.println("readInputsToArrayFromFile: Caught NumberFormatException: " + e.getMessage());
+					System.err.println("readInputsToArrayFromFile: File= " + filename + " Caught NumberFormatException: " + e.getMessage());
 					System.exit(1);
 				}
 				

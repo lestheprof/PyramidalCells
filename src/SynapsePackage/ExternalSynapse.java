@@ -51,6 +51,7 @@ public class ExternalSynapse extends AbstractSynapse {
 		// calculate the post-synaptic activity from this synapse and return it
 		// this version restarts the alpha function when a new spike occurs
 		// is there a new spike at this time
+		 if (spikeTimes == null) return 0 ; // if there's no spikes, then post-synaptic activation is 0.
 		if ((spikeTimeIndex+1 < spikeTimes.length) && (spikeTimes[spikeTimeIndex + 1] <= currentTime)){
 			// there is a new spike
 			spikeTimeIndex = spikeTimeIndex + 1 ; // point to new spike
