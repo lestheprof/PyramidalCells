@@ -6,10 +6,10 @@ package CompartmentPackage;
 import NeuronPackage.PyramidalNeuron;
 
 /**
- * @author lss
  * spiking compartment intended for pyramidal neurons
  * does not currently use any synapses, but these can be created (using the code in AbstractCompartment)
  * and implemented in runAndSpike
+ * @author lss
  */
 public class AxonHillock extends AbstractSpikingCompartment {
 

@@ -12,9 +12,9 @@ import NeuronPackage.*;
 import SynapsePackage.SynapseForm;
 
 /**
- * @author lss
  * Class to hold the neural network itself. Uses an array of AbstractNeurons. 
  * Initialised in constructor only to supply sampling rate: otherwise initialised in setup
+ * @author lss
  *
  */
 public class NeuronalNetwork {
@@ -207,7 +207,7 @@ public class NeuronalNetwork {
 	
 	/**
 	 * Writes all spikes to a file, csv format
-	 * @param filename String name of file to be written to
+	 * @param fileName String name of file to be written to
 	 */
 	public void writeSpikes(String fileName) {
 		FileWriter fileWriter = null;

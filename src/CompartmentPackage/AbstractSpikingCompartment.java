@@ -11,6 +11,7 @@ import SynapsePackage.InternalSynapse;
 import SynapsePackage.SynapseForm;
 
 /**
+ * Abstract spiking compartment underlying all compartments with an output.
  * @author lss
  *
  */

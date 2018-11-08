@@ -11,6 +11,7 @@ import NeuronPackage.PyramidalNeuron;
 import SynapsePackage.*;
 
 /**
+ * Apical tuft compartment, part of pyramidal neuron, receiving contextual inputs
  * @author lss
  *
  */

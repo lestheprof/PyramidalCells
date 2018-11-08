@@ -1,6 +1,11 @@
 package CompartmentPackage;
 
 import java.util.ArrayList;
+
+/**
+ * Abstract compartment underlying all neuronal compartments. 
+ * @author lss
+ */
 import java.util.List;
 
 import NeuronPackage.AbstractNeuron;

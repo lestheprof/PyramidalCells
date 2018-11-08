@@ -11,6 +11,7 @@ import NeuronPackage.PyramidalNeuron;
 import SynapsePackage.*;
 
 /**
+ * Compartment receiving driving inputs, part of pyramidal neuron.
  * @author lss
  *
  */

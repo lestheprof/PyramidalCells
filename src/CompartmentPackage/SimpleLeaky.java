@@ -1,9 +1,9 @@
 package CompartmentPackage;
 
 import NeuronPackage.InterNeuron; 
-/*
- * Simple leaky compartment, with leak tauInhib, threshold of 1.
- * 
+/**
+ * Simple leaky compartment, with leak tauInhib, threshold of 1. Intended for inhibitory interneurons
+ * @author lss
  */
 public class SimpleLeaky extends AbstractSpikingCompartment {
 	public double tauInhib ;

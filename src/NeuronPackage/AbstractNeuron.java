@@ -2,6 +2,10 @@ package NeuronPackage;
 
 import java.util.List;
 
+/**
+ * 
+ */
+
 import CompartmentPackage.AbstractSpikingCompartment;
 
 public abstract class AbstractNeuron {

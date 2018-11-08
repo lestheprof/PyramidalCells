@@ -19,13 +19,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
+ * Runs the neural network. Called with flags to set up operation.
  * @author lss
- * (1) Runs the neural network
  */
 public class RunNeuralNetwork {
 
 	/**
-	 * Runs the neural network
+	 * Runs the neural network: contains main method called from command line.
 	 */
 	static int samplingRate = 10000 ;
 	static double endTime = 5.0 ;
@@ -45,7 +45,7 @@ public class RunNeuralNetwork {
 	 * @param args: -n followed by network specifier
 	 * @param args: -p_refractory_period followed by pyramidal neuron refractory period: default 0
 	 * @param args: -s followed by sampling rate (defaults to 10000)
-	 * @param args: -sout followed by spike output file name: will be csv, <neuron, time>
+	 * @param args: -sout followed by spike output file name: will be csv, (neuron, time)
 	 * @param args: -t followed by end time (defaults to 5.0)
 	 * @param args: -t_apical followed by time constant (tau) for basal dendrite: default 0.1
 	 * @param args: -t_basal followed by time constant (tau) for basal dendrite: default 0.1
