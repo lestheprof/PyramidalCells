@@ -264,7 +264,18 @@ public class RunNeuralNetwork {
 		
 	}
 	
-	private static char[]  readNetworkFromFile(String filename) throws IOException
+	/**
+	 * Last update 8 November 2018
+	 * @param filename: name of file from which network configuration is to be read
+	 * Each line has form n P|I
+	 * and there has to be an entry for each n, from 1 up to number of neurons.
+	 * note that neurons in the simulation are numbered from 0 to n-1
+	 * @return string of length number of neurons with each character being the type of the neuron (P or I currently).
+	 * @throws IOException if file not found
+	 * @throws NumberFormatException if neuron number not an integer 
+	 * @author lss
+	 */
+	private static char[]  readNetworkFromFile(String filename) throws IOException, NumberFormatException
 	{
 		List<String> InputList = null;
 
@@ -282,19 +293,27 @@ public class RunNeuralNetwork {
 		while (inputIterator.hasNext()) {
 			String nextInput = inputIterator.next().trim();
 			String[] inputComponents = nextInput.split("\\s+|,", 2); // allows spaces or single commas as separators
+			try{
+				nno = Integer.parseInt(inputComponents[0]) - 1; // neurons are numbered from 1 upwards
+			} catch (NumberFormatException e) {
+				System.err.println("readNetworkFromFile: Caught NumberFormatException: " + e.getMessage());
+				System.exit(1);
+			}
 			returnString[nno] = inputComponents[1].charAt(inputComponents[1].length() - 1) ;
-			nno = nno + 1 ;
 		}
 		return returnString ;
 	}
 	
-	/*
+	/**
 	 * @param filename: name of file o be read
 	 * @param numPerLine number of doubles expected per line. 
+	 * @return array of doubles,input list size by numPerLine  
+	 * @throws IOException if file not found
+	 * @throws NumberFormatException if number  in file not convertable to doubles
 	 */
 	private static double[][] readInputsToArrayFromFile(String filename, int numPerLine )  
 			throws IOException, NumberFormatException
-	/*
+	/**
 	 * Reads the input in to a 2D
 	 * array where the array is N by numPerLine, with each row being input
 	 * (neuron/channel) number, synapse, time (seconds) for external inputs
