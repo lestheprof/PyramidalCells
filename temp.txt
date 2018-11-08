@@ -1,6 +1,1 @@
-1 3
-2    8
-4 5
-abcfder
-
-dd
+-d driving2aa.csv -c context1.csv -s 5000 -t 1.0 -wd drivingsynapses.txt -wc contextsynapses.txt -alpha_driver 1000 -alpha_context 300 -apical_multiplier 8 -p_refractory_period 0.01 -i_refractory_period 0.01 -t_basal 0.01 -t_apical 0.1 -t_inhib 0.05 -n "network.txt" -wi "intSynapses.csv"

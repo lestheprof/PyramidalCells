@@ -20,18 +20,39 @@ import java.nio.file.Paths;
 
 /**
  * @author lss
- *
+ * (1) Runs the neural network
  */
 public class RunNeuralNetwork {
 
 	/**
-	 * 
+	 * Runs the neural network
 	 */
 	static int samplingRate = 10000 ;
 	static double endTime = 5.0 ;
 
 	/**
-	 * @param args: -f filename for source of external spikes
+	 * @param args: -alpha_context followed by alpha value for contextual synapses: default 1000
+	 * @param args: -alpha_driver followed by alpha value for driving synapses: default 1000
+	 * @param args: -alpha_internal_excitatory followed by alpha value for internal excitatory synapses: default 900
+	 * @param args: -alpha_internal_inhibitory followed by alpha value for internal inhibitory synapses: default 200
+	 * @param args: -apical_gradient followed by apical gradient for apical dendrite: default 1
+	 * @param args: -apical_multiplier followed by apical multiplier for apical dendrite: default 1
+	 * @param args: -axon_threshold followed by axon threshold: default 1 (named pyr_threshold)
+	 * @param args: -c input spike file name, get file name for external contextual spike inputs
+	 * @param args: -d followed by input spike file name, so get file name for external driving spike inputs
+	 * @param args: -i_refractory_period followed by inhibitory neuron refractory period: default 0
+	 * @param args: -inhibitory_threshold followed by inhibitory neuron threshold: default 1
+	 * @param args: -n followed by network specifier
+	 * @param args: -p_refractory_period followed by pyramidal neuron refractory period: default 0
+	 * @param args: -s followed by sampling rate (defaults to 10000)
+	 * @param args: -sout followed by spike output file name: will be csv, <neuron, time>
+	 * @param args: -t followed by end time (defaults to 5.0)
+	 * @param args: -t_apical followed by time constant (tau) for basal dendrite: default 0.1
+	 * @param args: -t_basal followed by time constant (tau) for basal dendrite: default 0.1
+	 * @param args: -t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
+	 * @param args: -wc followed by weight file for contextual inputs
+	 * @param args: -wd followed by weight file for driving inputs
+	 * @param args: -wi followed by weight and delay file for internal synapses
 	 * @throws IOException for file not found
 	 */
 	public static void main(String[] args) throws IOException {
