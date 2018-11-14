@@ -40,6 +40,7 @@ public class RunNeuralNetwork {
 	 * @param args: -axon_threshold followed by axon threshold: default 1 (named pyr_threshold)
 	 * @param args: -c input spike file name, get file name for external contextual spike inputs
 	 * @param args: -d followed by input spike file name, so get file name for external driving spike inputs
+	 * @param args: -fileprefix followed by a string, to be prepended to file names: must be before other file names
 	 * @param args: -i_refractory_period followed by inhibitory neuron refractory period: default 0
 	 * @param args: -inhibitory_threshold followed by inhibitory neuron threshold: default 1
 	 * @param args: -n followed by network specifier
@@ -66,6 +67,7 @@ public class RunNeuralNetwork {
 		double [][] drivingSynapseWeights = null ;
 		double [][] internalSynapseWeightsDelays = null ;
 		String spikeOutFileName = null ;
+		String filePrefix = null ; // used to prepend =to file names
 		
 		double currentTime ; // now
 		double deltaTime ; // interval between samples
@@ -91,13 +93,17 @@ public class RunNeuralNetwork {
 
 		int argno = 0 ;
 		while (argno < args.length)
-			switch(args[argno]){
+			switch(args[argno].toLowerCase()){
+			case "-fileprefix": // must come before actual file names in which it's used
+				filePrefix = args[argno + 1] ;
+				argno = argno + 2 ;
+				break;	
 			case "-c": // followed by input spike file name, so get file name for external contextual spike inputs
-				contextArray = readInputsToArrayFromFile(args[argno + 1], 3); // neuron, synapse time
+				contextArray = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron, synapse time
 				argno = argno + 2 ;
 				break;
 			case "-d": // followed by input spike file name, so get file name for external driving spike inputs
-				drivingArray = readInputsToArrayFromFile(args[argno + 1], 3);	// neuron synapse time
+				drivingArray = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3);	// neuron synapse time
 				argno = argno + 2 ;
 				break;
 			case "-s": // followed by sampling rate (defaults to 10000)
@@ -109,26 +115,26 @@ public class RunNeuralNetwork {
 				argno = argno + 2 ;
 				break ;
 			case "-n": // network specifier
-				networkData = readNetworkFromFile(args[argno + 1]) ;
+				networkData = readNetworkFromFile(filePrefix + args[argno + 1]) ;
 				numberOfNeurons = networkData.length ;
 				argno = argno + 2 ;
 				break ;
 			case "-wd": // followed by weight file for driving inputs
 				// for now, we assume that the compartment number for these driving  weights is 1.
-				drivingSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
+				drivingSynapseWeights = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break ;
 			case "-wc": // followed by weight file for contextual inputs
 				// for now, we assume that the compartment number for these contextual weights is 2.
-				contextSynapseWeights = readInputsToArrayFromFile(args[argno + 1], 3); // neuron number, synapse number, weight
+				contextSynapseWeights = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break  ;
 			case "-wi": // followed by weight and delay file for internal synapses
-				internalSynapseWeightsDelays = readInputsToArrayFromFile(args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
+				internalSynapseWeightsDelays = readInputsToArrayFromFile(filePrefix + args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
 				argno = argno + 2 ;
 				break ;
 			case "-sout": // followed by spike output file name: will be csv, <neuron, time>
-				spikeOutFileName = new String(args[argno + 1]);
+				spikeOutFileName = filePrefix + new String(args[argno + 1]);
 				argno = argno + 2 ;
 				break ;
 			case "-t_basal": // time constant (tau) for basal dendrite
