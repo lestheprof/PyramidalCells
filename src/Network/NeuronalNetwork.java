@@ -36,14 +36,14 @@ public class NeuronalNetwork {
 	public void setup(NeuronInfo[] networkInfo){
 		// setup the network: that is, create the neurons
 		// interconnection is defined by the internal synapses
-		// defined by a string eventually: for now just a single pyramidal neuron
+		// defined by a string eventually:
 		// set up the neurons, with id = 1
 		neurons = new AbstractNeuron[networkInfo.length] ;
 		for (int nno = 0 ; nno< neurons.length; nno++){
 			if (networkInfo[nno] instanceof PyramidalNeuronInfo)
 				neurons[nno] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[nno]) ;
 			else if (networkInfo[nno] instanceof InterNeuronInfo)
-				neurons[nno] = new InterNeuron((InterNeuronInfo)networkInfo[nno]) ;
+				neurons[nno] = new InterNeuron((InterNeuronInfo) networkInfo[nno]) ;
 			else System.err.println("NeuronalNetwork.setup: " + "invalid networkInfo type");
 		}
 	}
@@ -108,6 +108,11 @@ public class NeuronalNetwork {
 				alpha = alphaInternalExcitatory;
 			}
 			synapseID = synapseID + 1; // start them at 1
+			if (toNeuronIndex >= neurons.length)
+				// invalid synapse endpoint
+				System.out.println("NeuronalNetwork.setUpInternalSynapses: synapse endpoint = " + toNeuronIndex + " past last neuron = " +
+				(neurons.length -1)) ;
+				
 			// find the toCompartment
 			if (neurons[toNeuronIndex] instanceof InterNeuron)
 				switch ((int) (Math.round(internalSynapseWeightsDelays[synapseNo][2]))) {
