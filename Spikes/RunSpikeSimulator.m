@@ -68,6 +68,8 @@ t_apical = 0.1 ;
 t_basal = 0.1 ;
 % t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
 t_inhib = 0.2 ;
+% verbosity: v controls the amout of output generated
+v = 1 ;
 
 
 
@@ -145,6 +147,9 @@ while(i<=size(varargin,2))
         case 't_inhib'
             t_inhib = varargin{i+1}; 
             i=i+1 ;
+        case 'v'
+            v = varargin{i+1}; 
+            i=i+1 ;
         otherwise
             error('RunSpikeSimulator: Unknown argument %s given',varargin{i});
     end
@@ -161,7 +166,7 @@ part2 = [' -wc "' wc '" -wd "' wd '" -wi "' wi '" -t ' num2str(t) ' -s ' num2str
 part3 = [' -alpha_context ' num2str(alpha_context) ' -alpha_driver ' num2str(alpha_driver) ' -alpha_internal_excitatory ' num2str(alpha_internal_excitatory) ] ;
 part4 = [' -alpha_internal_inhibitory ' num2str(alpha_internal_inhibitory) ' -apical_gradient ' num2str(apical_gradient) ' -axon_threshold ' num2str(axon_threshold)] ;
 part5 = [' -i_refractory_period ' num2str(i_refractory_period) ' -inhibitory_threshold ' num2str(inhibitory_threshold) ' -p_refractory_period ' num2str(p_refractory_period)] ;
-part6 = [' -t_apical ' num2str(t_apical) ' -t_basal ' num2str(t_basal)  ' -t_inhib ' num2str(t_inhib)] ;
+part6 = [' -t_apical ' num2str(t_apical) ' -t_basal ' num2str(t_basal)  ' -t_inhib ' num2str(t_inhib) ' -v ' num2str(v)] ;
 % now actually run the simulation
 system([commandtorun part1 part2 part3 part4 part5 part6]) ;
 

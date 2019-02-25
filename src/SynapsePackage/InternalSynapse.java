@@ -24,7 +24,7 @@ public class InternalSynapse extends AbstractSynapse {
 	public AbstractSpikingCompartment fromCompartment ;
 	public AbstractNeuron fromNeuron ;
 	public List <Integer> incomingSpikeSampleTimes = null ;
-	private boolean debug = true ;
+	private boolean debug = false ;
 
 	/**
 	 * @param weight weight of synapse

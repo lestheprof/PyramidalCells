@@ -51,6 +51,7 @@ public class RunNeuralNetwork {
 	 * @param args: -t_apical followed by time constant (tau) for basal dendrite: default 0.1
 	 * @param args: -t_basal followed by time constant (tau) for basal dendrite: default 0.1
 	 * @param args: -t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
+	 * @param arcg: -v followed by verbosity: controls amount of system.out data created: default 1
 	 * @param args: -wc followed by weight file for contextual inputs
 	 * @param args: -wd followed by weight file for driving inputs
 	 * @param args: -wi followed by weight and delay file for internal synapses
@@ -88,6 +89,8 @@ public class RunNeuralNetwork {
 		double inhThreshold = 1 ; // threshold for inhbitory neurons
 		double pyrRefractoryPeriod = 0 ; // default pyramidal RP is no RP
 		double inhRefractoryPeriod = 0 ; // default inhibitory refractory period is 0
+		
+		int verbosity = 1; // default for amount of system.out output created
 		
 
 
@@ -189,6 +192,10 @@ public class RunNeuralNetwork {
 				inhRefractoryPeriod = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break  ;
+			case "-v": // verbosity of system.out data
+				verbosity = Integer.parseInt(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
@@ -256,7 +263,7 @@ public class RunNeuralNetwork {
 			currentTime = currentTime + deltaTime ;
 		}
 		// generated spikes are in neuron.spikesOut
-		System.out.println("Spikes generated:");
+		System.out.println("Spikes written to file: " + spikeOutFileName);
 		// save spikes to  file here
 		if (spikeOutFileName != null)
 		{
@@ -265,7 +272,11 @@ public class RunNeuralNetwork {
 			// but there's no synapse number, just <neuron><time>, .csv format for maximal ease of reuse. 
 			NN.writeSpikes(spikeOutFileName);
 		}
-		NN.displaySpikes();
+		if (verbosity >=1)
+		{
+			System.out.println("Spikes Generated:") ;
+			NN.displaySpikes();
+		}
 		System.out.println("Simulation ended");
 		
 	}
