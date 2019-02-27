@@ -23,8 +23,8 @@ public class SimpleLeaky extends AbstractSpikingCompartment {
  * @param tauInhib  tau value for this leaky compartment
  * @param refractoryPeriod  refractory period in seconds
  */
-	public SimpleLeaky(InterNeuron neuron, int compartmentID, double tauInhib, double refractoryPeriod) {
-		super(neuron, compartmentID);
+	public SimpleLeaky(InterNeuron neuron, int compartmentID, double tauInhib, double refractoryPeriod, boolean debug) {
+		super(neuron, compartmentID, debug);
 		this.tauInhib = tauInhib ;
 		this.refractoryPeriod = refractoryPeriod ;
 		// pre-calculate activity change

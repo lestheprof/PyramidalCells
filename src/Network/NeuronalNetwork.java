@@ -19,6 +19,7 @@ import SynapsePackage.SynapseForm;
  */
 public class NeuronalNetwork {
 
+	public boolean debug ;
 	public int samplingRate ; 
 	public AbstractNeuron[] neurons ;
 	
@@ -26,8 +27,9 @@ public class NeuronalNetwork {
  * set sampling rate
  * @param samplingRate global sampling rate
  */
-	public NeuronalNetwork(int samplingRate) {
+	public NeuronalNetwork(int samplingRate, boolean debug) {
 		this.samplingRate = samplingRate ;
+		this.debug = debug ;
 	}
 	/**
 	 * 
@@ -41,9 +43,9 @@ public class NeuronalNetwork {
 		neurons = new AbstractNeuron[networkInfo.length] ;
 		for (int nno = 0 ; nno< neurons.length; nno++){
 			if (networkInfo[nno] instanceof PyramidalNeuronInfo)
-				neurons[nno] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[nno]) ;
+				neurons[nno] = new PyramidalNeuron((PyramidalNeuronInfo) networkInfo[nno], debug) ;
 			else if (networkInfo[nno] instanceof InterNeuronInfo)
-				neurons[nno] = new InterNeuron((InterNeuronInfo) networkInfo[nno]) ;
+				neurons[nno] = new InterNeuron((InterNeuronInfo) networkInfo[nno], debug) ;
 			else System.err.println("NeuronalNetwork.setup: " + "invalid networkInfo type");
 		}
 	}

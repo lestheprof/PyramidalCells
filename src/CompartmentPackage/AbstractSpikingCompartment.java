@@ -25,8 +25,8 @@ public abstract class AbstractSpikingCompartment extends AbstractCompartment {
 	 * @param neuron neuron to which this compartment belongs
 	 * @param compartmentID ID pof compartment
 	 */
-	public AbstractSpikingCompartment(AbstractNeuron neuron, int compartmentID) {
-		super(neuron, compartmentID); 
+	public AbstractSpikingCompartment(AbstractNeuron neuron, int compartmentID, boolean debug) {
+		super(neuron, compartmentID, debug); 
 		outgoingSynapses = new ArrayList <InternalSynapse>() ;
 		// TODO Auto-generated constructor stub
 	}

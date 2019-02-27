@@ -20,6 +20,8 @@ public abstract class AbstractCompartment {
 	public int samplingrate ;
 	public String compartmentType = null ;
 	
+	public boolean debug = true ;
+	
 	protected List <InternalSynapse> incomingSynapses  = null;
 	
 	/**
@@ -27,13 +29,14 @@ public abstract class AbstractCompartment {
 	 * @param neuron neuron to which this compartment belongs
 	 * @param compartmentID ID of this compartment
 	 */
-	public AbstractCompartment(AbstractNeuron neuron, int compartmentID) {
+	public AbstractCompartment(AbstractNeuron neuron, int compartmentID, boolean debug) {
 		// TODO Auto-generated constructor stub
 		this.activation = 0 ; // initialise the activation, here in this abstract version, to 0
 		this.myNeuron = neuron ;
 		this.compartmentID = compartmentID ;
 		this.samplingInterval = neuron.samplingInterval ;
 		this.samplingrate = neuron.samplingRate ;
+		this.debug = debug ;
 	}
 	
 	public int getNeuronID(){

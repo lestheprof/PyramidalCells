@@ -26,8 +26,8 @@ public double gradient = 1 ;
 	 * @param gradient parameter to transfer function
 	 * @param id id of this compartment
 	 */
-	public ApicalDendrite(PyramidalNeuron neuron, double multiplier, double gradient,int id) {
-		super(neuron, id) ; // so compartment knows its neuron id and its own id
+	public ApicalDendrite(PyramidalNeuron neuron, double multiplier, double gradient,int id, boolean debug) {
+		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		this.multiplier = multiplier ;
 		this.gradient = gradient ;
 		compartmentType = "Apical Dendrite Compartment" ;

@@ -32,8 +32,8 @@ public class ApicalTuft extends AbstractCompartment {
 	 * @param id identity of this compartment
 	 * @param tauApical is time constant for this compartment
 	 */
-	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApical) {
-		super(neuron, id) ; // so compartment knows its neuron id and its own id
+	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApical, boolean debug) {
+		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		this.tauApical = tauApical ;
 		compartmentType = "Apical Tuft Compartment" ;
 		// calculate the leakiness per sample

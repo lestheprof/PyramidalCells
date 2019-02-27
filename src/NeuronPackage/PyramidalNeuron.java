@@ -17,7 +17,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 	private ExternalSynapse[] extContextSynapses ;
 	// public List<Double> spikesOut = null ; now in AbstractNeuron
 	
-	private boolean debug = false ;
+	// private boolean debug = false ; now declared in AbstractNeuron
 	
 	/*
 	 * ID String identity of the neuron
@@ -26,15 +26,15 @@ public class PyramidalNeuron extends AbstractNeuron {
 	 * tauApical is time constant for Apical tuft dendrites
 	 */
 	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical, 
-			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod) {
-		super(ID, samplingRate);
+			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod, boolean debug) {
+		super(ID, samplingRate, debug);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
-		this.apicalTuft = new ApicalTuft(this, 2, tauApical) ;
-		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3) ;
-		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod) ;
+		this.apicalTuft = new ApicalTuft(this, 2, tauApical, debug) ;
+		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3, debug) ;
+		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod, debug) ;
 		this.spikingCompartment = this.axonHillock ;
-		this.basalDendrite = new BasalDendrite(this, 1, tauBasal) ;
+		this.basalDendrite = new BasalDendrite(this, 1, tauBasal, debug) ;
 		this.spikesOut = new ArrayList<> () ;
 
 	}
@@ -42,15 +42,15 @@ public class PyramidalNeuron extends AbstractNeuron {
 	/*
 	 * Create a pyramidal neuron from t PyramidalNeuyronInfo descriptor
 	 */
-	public PyramidalNeuron(PyramidalNeuronInfo p1) {
-		super(p1.identity, p1.samplingRate);
+	public PyramidalNeuron(PyramidalNeuronInfo p1, boolean debug) {
+		super(p1.identity, p1.samplingRate, debug);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
-		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApical) ;
-		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3) ;
-		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod) ;
+		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApical, debug) ;
+		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3, debug) ;
+		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod, debug) ;
 		this.spikingCompartment = this.axonHillock ;
-		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal) ;
+		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal, debug) ;
 		this.spikesOut = new ArrayList<> () ;
 
 	}

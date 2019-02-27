@@ -24,7 +24,7 @@ public class BasalDendrite extends AbstractCompartment {
 	public double externalActivation ;
 	double activityChange ;
 	
-	private boolean debug = true ;
+	// private boolean debug = true ; now in AbstractCompartment
 	
 /**
  * 
@@ -32,8 +32,8 @@ public class BasalDendrite extends AbstractCompartment {
  * @param id id of this compartment
  * @param tauBasal tau value for leakage of this compartment
  */
-	public BasalDendrite(PyramidalNeuron neuron, int id, double tauBasal) {
-		super(neuron, id) ; // so compartment knows its neuron id and its own id
+	public BasalDendrite(PyramidalNeuron neuron, int id, double tauBasal, boolean debug) {
+		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		this.tauBasal = tauBasal ;
 		compartmentType = "Basal Dendrite Compartment" ;
 		// calculate the leakiness per sample

@@ -40,6 +40,7 @@ public class RunNeuralNetwork {
 	 * @param args: -axon_threshold followed by axon threshold: default 1 (named pyr_threshold)
 	 * @param args: -c input spike file name, get file name for external contextual spike inputs
 	 * @param args: -d followed by input spike file name, so get file name for external driving spike inputs
+	 * @param args: -debug followed by 1 (true) or 0 (false) to set debug on/off
 	 * @param args: -fileprefix followed by a string, to be prepended to file names: must be before other file names
 	 * @param args: -i_refractory_period followed by inhibitory neuron refractory period: default 0
 	 * @param args: -inhibitory_threshold followed by inhibitory neuron threshold: default 1
@@ -91,6 +92,7 @@ public class RunNeuralNetwork {
 		double inhRefractoryPeriod = 0 ; // default inhibitory refractory period is 0
 		
 		int verbosity = 1; // default for amount of system.out output created
+		boolean debug = false ;
 		
 
 
@@ -196,13 +198,19 @@ public class RunNeuralNetwork {
 				verbosity = Integer.parseInt(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
+			case "-debug": // debug opnm or off
+				int debuglevel = Integer.parseInt(args[argno + 1]) ; ;
+				if (debuglevel == 1)
+					debug = true ;
+				argno = argno + 2 ;
+				break  ;
 			default:
 				System.out.println("Unexpected value in arguments = " + args[argno]);
 				argno = argno + 1 ;
 				break ;
 			}
 		// set up the neuronalNetwork with values that go across all neurons
-		NeuronalNetwork NN = new NeuronalNetwork(samplingRate) ;
+		NeuronalNetwork NN = new NeuronalNetwork(samplingRate, debug) ;
 		// set up the neuron information, with id = 1 (only 1 for now)
 		networkInfo = new NeuronInfo[numberOfNeurons] ;
 		for (int nno = 0; nno < numberOfNeurons; nno++)

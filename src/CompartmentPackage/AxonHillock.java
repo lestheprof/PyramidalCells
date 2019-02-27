@@ -24,8 +24,8 @@ public double refractoryPeriod = 0.02 ;
  * @param threshold threshold for firing
  * @param refractoryPeriod in seconds
  */
-	public AxonHillock(PyramidalNeuron neuron, int id, double threshold, double refractoryPeriod) {
-		super(neuron, id) ; // so compartment knows its neuron id and its own id
+	public AxonHillock(PyramidalNeuron neuron, int id, double threshold, double refractoryPeriod, boolean debug) {
+		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		compartmentType = "Axon Hillock Compartment" ;
 		this.threshold  = threshold ;
 		this.refractoryPeriod = refractoryPeriod ;

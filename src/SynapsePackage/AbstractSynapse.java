@@ -26,6 +26,8 @@ public abstract class AbstractSynapse {
 	public int alphaArrayLength;
 	public SynapseForm synapseType ;
 	public AbstractCompartment targetCompartment ;
+	
+	public boolean debug = false ;
 
 
 	

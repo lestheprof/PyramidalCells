@@ -23,12 +23,12 @@ public class InterNeuron extends AbstractNeuron {
 	 * @param threshold threshold for neuron
 	 * @param refractoryPeriod refractory period in seconds
 	 */
-	public InterNeuron(int ID, int samplingRate, double tauInhibitory,  double threshold, double refractoryPeriod) {
-		super(ID, samplingRate);
+	public InterNeuron(int ID, int samplingRate, double tauInhibitory,  double threshold, double refractoryPeriod, boolean debug) {
+		super(ID, samplingRate, debug);
 		// initialise output spikes
 		this.spikesOut = new ArrayList<> () ;
 		// create the single compartment for this neuron
-		this.simpleLeaky = new SimpleLeaky(this, 1, tauInhibitory, refractoryPeriod) ;	
+		this.simpleLeaky = new SimpleLeaky(this, 1, tauInhibitory, refractoryPeriod, debug) ;	
 		this.spikingCompartment = this.simpleLeaky ;
 		this.spikesOut = new ArrayList<> () ;
 	}
@@ -36,10 +36,10 @@ public class InterNeuron extends AbstractNeuron {
 	/*
 	 * Create an inhibitory interneuron from an InterNeuronInfo descriptor
 	 */
-	public InterNeuron(InterNeuronInfo i1) {
-		super(i1.identity, i1.samplingRate);
+	public InterNeuron(InterNeuronInfo i1, boolean debug) {
+		super(i1.identity, i1.samplingRate, debug);
 // set up the compartment of this neuron
-		this.simpleLeaky = new SimpleLeaky(this, 1, i1.tauInhib, i1.refractoryPeriod) ;
+		this.simpleLeaky = new SimpleLeaky(this, 1, i1.tauInhib, i1.refractoryPeriod, debug) ;
 		this.spikingCompartment = this.simpleLeaky ;
 		this.spikesOut = new ArrayList<> () ;
 	}

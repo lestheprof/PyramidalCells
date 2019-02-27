@@ -14,7 +14,7 @@ public class ExternalSynapse extends AbstractSynapse {
 	private Double[] spikeTimes = null; // external spike times for this synapse
 	private int spikeTimeIndex;
 	private boolean inspike ;// set when we are inside the alpha function
-	private boolean debug = false ;
+	// private boolean debug = false ; now in abstyractsynapse
 	
 	/**
 	 * @param weight weight for thissynapse
