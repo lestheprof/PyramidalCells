@@ -17,6 +17,9 @@ import NeuronPackage.PyramidalNeuron;
 public class ApicalDendrite extends AbstractCompartment {
 public double multiplier = 1 ;  
 public double gradient = 1 ;
+PyramidalNeuron neuron = null ;
+public int transferfunction = 1 ; // use to choose transfer function
+
 
 // output is multiplier * logistic(gradient * input)
 	/**
@@ -26,19 +29,25 @@ public double gradient = 1 ;
 	 * @param gradient parameter to transfer function
 	 * @param id id of this compartment
 	 */
-	public ApicalDendrite(PyramidalNeuron neuron, double multiplier, double gradient,int id, boolean debug) {
+	public ApicalDendrite(PyramidalNeuron neuron, double multiplier, double gradient,int id, int transferfunction, boolean debug) {
 		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		this.multiplier = multiplier ;
 		this.gradient = gradient ;
 		compartmentType = "Apical Dendrite Compartment" ;
+		this.neuron = (PyramidalNeuron) this.myNeuron ; // cast required to use .apicalTuft
+		this.transferfunction = transferfunction ;
 		// TODO Auto-generated constructor stub
 	}
 	
 
 	public void run(double currentTime){
-		PyramidalNeuron neuron = (PyramidalNeuron) this.myNeuron ;
+		if (transferfunction == 1)
 		// apply a logistic here to get a numeric output to be used to modify basal input to axon hillock.
-		this.activation = multiplier/(1 + Math.exp( - gradient *  neuron.apicalTuft.activation)) ;
+			this.activation = multiplier/(1 + Math.exp( - gradient *  neuron.apicalTuft.activation)) ;
+		else if (transferfunction == 2)
+			// simply scale the apical tuft activation
+			this.activation = multiplier * neuron.apicalTuft.activation ;
+		// end if		
 	}
 	
 	

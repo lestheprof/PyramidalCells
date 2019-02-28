@@ -85,6 +85,9 @@ public class RunNeuralNetwork {
 		
 		double apicalMultiplier = 1 ; // multiplier for apical dendrite: output = mult * logistic(gradient * input)
 		double apicalGradient = 1 ;
+		int transferfunction = 1 ; // defines the transfer function used in apical dendrite & axon hillock
+		double K1 = 0.5 ; // for use with transfer function  == 2 (TF2_K1), from Kay & Phillips 2011
+		double K2 = 1 ; // for use with transfer function  == 2 (TF2_K2), from Kay & Phillips 2011
 		
 		double pyrThreshold = 1 ; // threshold for axon hillock
 		double inhThreshold = 1 ; // threshold for inhbitory neurons
@@ -178,6 +181,18 @@ public class RunNeuralNetwork {
 				apicalGradient = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break  ;
+			case "-transferfunction":
+				transferfunction = Integer.parseInt(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break   ;
+			case "-tf2_k1":
+				K1 = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
+			case "-tf2_k2":
+				K2 = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break  ;
 			case "-axon_threshold": // axon threshold
 				pyrThreshold = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
@@ -217,7 +232,7 @@ public class RunNeuralNetwork {
 		{
 			if (networkData[nno] == 'P')
 					networkInfo[nno]  = new PyramidalNeuronInfo(nno + 1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
-				apicalGradient, pyrThreshold, pyrRefractoryPeriod) ;
+				apicalGradient, pyrThreshold, pyrRefractoryPeriod, transferfunction, K1, K2) ;
 			else if (networkData[nno] == 'I')
 				networkInfo[nno]  = new InterNeuronInfo(nno + 1, samplingRate, tauInhib, inhThreshold, inhRefractoryPeriod) ;
 			else

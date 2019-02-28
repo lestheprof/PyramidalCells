@@ -15,6 +15,9 @@ public class PyramidalNeuron extends AbstractNeuron {
 	public BasalDendrite basalDendrite ;
 	private ExternalSynapse[] extDrivingSynapses ;
 	private ExternalSynapse[] extContextSynapses ;
+	public int transferfunction ; // used to select transfer function in apical dendrite and axon hillock
+	public double K1 ; // only meaningful when transferfunction == 2: used as in Kay & Phillips 2011
+	public double K2 ; // only meaningful when transferfunction == 2
 	// public List<Double> spikesOut = null ; now in AbstractNeuron
 	
 	// private boolean debug = false ; now declared in AbstractNeuron
@@ -26,13 +29,17 @@ public class PyramidalNeuron extends AbstractNeuron {
 	 * tauApical is time constant for Apical tuft dendrites
 	 */
 	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical, 
-			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod, boolean debug) {
+			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod, 
+			int transferfunction, double K1, double K2, boolean debug) {
 		super(ID, samplingRate, debug);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
+		this.transferfunction = transferfunction ;
+		this.K1 = K1 ;
+		this.K2 = K2 ;
 		this.apicalTuft = new ApicalTuft(this, 2, tauApical, debug) ;
-		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3, debug) ;
-		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod, debug) ;
+		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3, transferfunction, debug) ;
+		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod, transferfunction, K1, K2, debug) ;
 		this.spikingCompartment = this.axonHillock ;
 		this.basalDendrite = new BasalDendrite(this, 1, tauBasal, debug) ;
 		this.spikesOut = new ArrayList<> () ;
@@ -46,12 +53,18 @@ public class PyramidalNeuron extends AbstractNeuron {
 		super(p1.identity, p1.samplingRate, debug);
 // set up the compartments of this neuron
 		// Pyramidal neuron has 4 compartments: these are also numbered for identification purposes
+		this.transferfunction = p1.transferfunction ;
+		this.K1 = p1.K1 ;
+		this.K2 = p1.K2 ;
 		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApical, debug) ;
-		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3, debug) ;
-		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod, debug) ;
+		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3, p1.transferfunction,
+			debug) ;
+		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod, transferfunction, p1.K1, p1.K2, debug) ;
 		this.spikingCompartment = this.axonHillock ;
 		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal, debug) ;
 		this.spikesOut = new ArrayList<> () ;
+
+		
 
 	}
 	/*
