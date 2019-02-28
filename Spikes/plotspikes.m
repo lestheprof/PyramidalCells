@@ -7,5 +7,6 @@ function plotspikes(filename)
     plot(m1(:,2), m1(:,1), '.') ;
     % adjust y valus to meake plot easier to read
     ylim([0 max(m1(:,1))+1] );
+    xlabel('time') ;
 end
 

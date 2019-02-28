@@ -68,9 +68,15 @@ t_apical = 0.1 ;
 t_basal = 0.1 ;
 % t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
 t_inhib = 0.2 ;
+% transferfunction controls effect of apical tuft & axon hillock: 2 is Kay
+% & Phillips 2011
+transferfunction = 1 ;
+% relevant only when trnsferfunction == 2
+tf2_k1 = 0.5 ;
+tf2_k2 = 2 ; % defaulkts from K&P 2011
 % verbosity: v controls the amout of output generated
 v = 1 ;
-% debugging: debug controls whetehr the program outputs debug info (1) or
+% debugging: debug controls whether the program outputs debug info (1) or
 % not (0)
 debug = 0 ;
 
@@ -150,6 +156,15 @@ while(i<=size(varargin,2))
         case 't_inhib'
             t_inhib = varargin{i+1}; 
             i=i+1 ;
+        case 'transferfunction'
+            transferfunction  = varargin{i+1}; 
+            i=i+1 ;
+        case 'tfr_k1'
+            tf2_k1 = varargin{i+1}; 
+            i=i+1 ;
+        case 'tfr_k2'
+            tf2_k2 = varargin{i+1}; 
+            i=i+1 ;
         case 'v'
             v = varargin{i+1}; 
             i=i+1 ;
@@ -172,9 +187,10 @@ part2 = [' -wc "' wc '" -wd "' wd '" -wi "' wi '" -t ' num2str(t) ' -s ' num2str
 part3 = [' -alpha_context ' num2str(alpha_context) ' -alpha_driver ' num2str(alpha_driver) ' -alpha_internal_excitatory ' num2str(alpha_internal_excitatory) ] ;
 part4 = [' -alpha_internal_inhibitory ' num2str(alpha_internal_inhibitory) ' -apical_gradient ' num2str(apical_gradient) ' -axon_threshold ' num2str(axon_threshold)] ;
 part5 = [' -i_refractory_period ' num2str(i_refractory_period) ' -inhibitory_threshold ' num2str(inhibitory_threshold) ' -p_refractory_period ' num2str(p_refractory_period)] ;
+part5a = [' -transferfunction ' num2str(transferfunction) ' -tf2_k1 ' num2str(tf2_k1) ' -tf2_k2 ' num2str(tf2_k2) ] ;
 part6 = [' -t_apical ' num2str(t_apical) ' -t_basal ' num2str(t_basal)  ' -t_inhib ' num2str(t_inhib) ' -v ' num2str(v) ' -debug ' num2str(debug)] ;
 % now actually run the simulation
-system([commandtorun part1 part2 part3 part4 part5 part6]) ;
+system([commandtorun part1 part2 part3 part4 part5 part5a part6]) ;
 
 end
 

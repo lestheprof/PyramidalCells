@@ -44,6 +44,8 @@ public class RunNeuralNetwork {
 	 * @param args: -fileprefix followed by a string, to be prepended to file names: must be before other file names
 	 * @param args: -i_refractory_period followed by inhibitory neuron refractory period: default 0
 	 * @param args: -inhibitory_threshold followed by inhibitory neuron threshold: default 1
+	 * @param args: -tf2_k1 followed by K1 value to use when transferfunction==2 is selected.
+	 * @param args: -tf2_k2 followed by K2 value to use when transferfunction==2 is selected.
 	 * @param args: -n followed by network specifier
 	 * @param args: -p_refractory_period followed by pyramidal neuron refractory period: default 0
 	 * @param args: -s followed by sampling rate (defaults to 10000)
@@ -52,7 +54,8 @@ public class RunNeuralNetwork {
 	 * @param args: -t_apical followed by time constant (tau) for basal dendrite: default 0.1
 	 * @param args: -t_basal followed by time constant (tau) for basal dendrite: default 0.1
 	 * @param args: -t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
-	 * @param arcg: -v followed by verbosity: controls amount of system.out data created: default 1
+	 * @param args: -transferfunction followed by 1 (original) or 2 (Kay and Phillips 2011) apical dendrite and axon hillock function selector
+	 * @param args: -v followed by verbosity: controls amount of system.out data created: default 1
 	 * @param args: -wc followed by weight file for contextual inputs
 	 * @param args: -wd followed by weight file for driving inputs
 	 * @param args: -wi followed by weight and delay file for internal synapses
