@@ -71,9 +71,9 @@ t_inhib = 0.2 ;
 % transferfunction controls effect of apical tuft & axon hillock: 2 is Kay
 % & Phillips 2011
 transferfunction = 1 ;
-% relevant only when trnsferfunction == 2
+% relevant only when transferfunction == 2
 tf2_k1 = 0.5 ;
-tf2_k2 = 2 ; % defaulkts from K&P 2011
+tf2_k2 = 2 ; % defaults from K&P 2011
 % verbosity: v controls the amout of output generated
 v = 1 ;
 % debugging: debug controls whether the program outputs debug info (1) or
