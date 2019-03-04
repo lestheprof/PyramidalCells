@@ -19,18 +19,26 @@ function  RunSpikeSimulator(varargin)
 fileprefix = '/Users/lss/Documents/Research/neuronsimulation/PyramidalCells/Test_Feb20_2019/' ;
 % c input spike file name, get file name for external contextual spike inputs
 c = 'contextspikes.csv' ;
+
 % d followed by input spike file name, so get file name for external driving spike inputs
 d = 'drivingspikes.csv' ;
+
 % n followed by network specifier
 n = 'networkconfig.txt' ;
 % sout followed by spike output file name: will be csv, (neuron, time)
-sout = 'outputspikes.csv' ;
+sout = '' ;
+% snumbersout followed by name oif file to write number iof spikes emitted
+% to
+snumbersout = '' ;
 % wc followed by weight file for contextual inputs
+% wc = '' ;
 wc = 'contextweights.txt' ;
 % wd followed by weight file for driving inputs
 wd = 'drivingweights.txt' ;
+% wd = '' ;
 % wi followed by weight and delay file for internal synapses
 wi = 'internalweights.txt' ;
+% wi = '' ;
 
 % t followed by end time (defaults to 5.0)
 t = 5.0 ;
@@ -101,6 +109,9 @@ while(i<=size(varargin,2))
             i=i+1 ;
         case 'sout'
             sout = varargin{i+1}; 
+            i=i+1 ;
+        case 'snumbersout'
+            snumbersout = varargin{i+1}; 
             i=i+1 ;
         case 'wc'
             wc = varargin{i+1}; 
@@ -185,7 +196,7 @@ end
 % note that for the parameters to the program, strings need to be in double
 % quotes
 % string will be long so do this in pieces for readability
-part1 = ['-fileprefix "' fileprefix '" -c "' c '" -d "' d '" -n "' n '" -sout "' sout '"'] ;
+part1 = ['-fileprefix "' fileprefix '" -c "' c '" -d "' d '" -n "' n '" -sout "' sout '"' ' -snumbersout "' snumbersout '"'] ;
 part2 = [' -wc "' wc '" -wd "' wd '" -wi "' wi '" -t ' num2str(t) ' -s ' num2str(s) ] ;
 part3 = [' -alpha_context ' num2str(alpha_context) ' -alpha_driver ' num2str(alpha_driver) ' -alpha_internal_excitatory ' num2str(alpha_internal_excitatory) ] ;
 part4 = [' -alpha_internal_inhibitory ' num2str(alpha_internal_inhibitory) ' -apical_gradient ' num2str(apical_gradient) ' -axon_threshold ' num2str(axon_threshold)] ;

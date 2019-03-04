@@ -49,6 +49,7 @@ public class RunNeuralNetwork {
 	 * @param args: -n followed by network specifier
 	 * @param args: -p_refractory_period followed by pyramidal neuron refractory period: default 0
 	 * @param args: -s followed by sampling rate (defaults to 10000)
+	 * @param args: -snumbersout followed by file name for number of spikes emitted by each neuron. default null.
 	 * @param args: -sout followed by spike output file name: will be csv, (neuron, time)
 	 * @param args: -t followed by end time (defaults to 5.0)
 	 * @param args: -t_apical followed by time constant (tau) for basal dendrite: default 0.1
@@ -72,6 +73,7 @@ public class RunNeuralNetwork {
 		double [][] drivingSynapseWeights = null ;
 		double [][] internalSynapseWeightsDelays = null ;
 		String spikeOutFileName = null ;
+		String sNumbersOutName = null ;
 		String filePrefix = null ; // used to prepend =to file names
 		
 		double currentTime ; // now
@@ -110,11 +112,13 @@ public class RunNeuralNetwork {
 				argno = argno + 2 ;
 				break;	
 			case "-c": // followed by input spike file name, so get file name for external contextual spike inputs
-				contextArray = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron, synapse time
+				if (!args[argno + 1].isEmpty())// allow empty string to mean no file
+					contextArray = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron, synapse time
 				argno = argno + 2 ;
 				break;
 			case "-d": // followed by input spike file name, so get file name for external driving spike inputs
-				drivingArray = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3);	// neuron synapse time
+				if (!args[argno + 1].isEmpty())// allow empty string to mean no file
+					drivingArray = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3);	// neuron synapse time
 				argno = argno + 2 ;
 				break;
 			case "-s": // followed by sampling rate (defaults to 10000)
@@ -131,21 +135,30 @@ public class RunNeuralNetwork {
 				argno = argno + 2 ;
 				break ;
 			case "-wd": // followed by weight file for driving inputs
+				if (!args[argno + 1].isEmpty())// allow empty string to mean no file (but will cause system, to exit)
 				// for now, we assume that the compartment number for these driving  weights is 1.
-				drivingSynapseWeights = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron number, synapse number, weight
+					drivingSynapseWeights = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break ;
 			case "-wc": // followed by weight file for contextual inputs
+				if (!args[argno + 1].isEmpty())// allow empty string to mean no file (but will cause system to exit)
 				// for now, we assume that the compartment number for these contextual weights is 2.
-				contextSynapseWeights = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron number, synapse number, weight
+					contextSynapseWeights = readInputsToArrayFromFile(filePrefix + args[argno + 1], 3); // neuron number, synapse number, weight
 				argno = argno + 2 ;
 				break  ;
 			case "-wi": // followed by weight and delay file for internal synapses
-				internalSynapseWeightsDelays = readInputsToArrayFromFile(filePrefix + args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
+				if (!args[argno + 1].isEmpty()) // allow empty string to mean no file (but this is OK)
+					internalSynapseWeightsDelays = readInputsToArrayFromFile(filePrefix + args[argno + 1], 5) ; // presynaptic neuron, postsynaptic neuron, postsynaptic compartment, weight, delay
 				argno = argno + 2 ;
 				break ;
 			case "-sout": // followed by spike output file name: will be csv, <neuron, time>
-				spikeOutFileName = filePrefix + new String(args[argno + 1]);
+				if (!new String(args[argno + 1]).isEmpty()) // allow empty string to mean no file
+					spikeOutFileName = filePrefix + new String(args[argno + 1]);
+				argno = argno + 2 ;
+				break ;
+			case "-snumbersout":
+			if (!new String(args[argno + 1]).isEmpty()) // allow empty string to mean no file
+				sNumbersOutName = filePrefix + new String(args[argno + 1]);
 				argno = argno + 2 ;
 				break ;
 			case "-t_basal": // time constant (tau) for basal dendrite
@@ -289,14 +302,21 @@ public class RunNeuralNetwork {
 			currentTime = currentTime + deltaTime ;
 		}
 		// generated spikes are in neuron.spikesOut
-		System.out.println("Spikes written to file: " + spikeOutFileName);
-		// save spikes to  file here
 		if (spikeOutFileName != null)
 		{
+			System.out.println("Spikes written to file: " + spikeOutFileName);
+			// save spikes to  file here
 			// save spikes to spikeOutFileName file using a method in NeuralNetwork
 			// format should be the same as for the driving or context spikes. 
 			// but there's no synapse number, just <neuron><time>, .csv format for maximal ease of reuse. 
 			NN.writeSpikes(spikeOutFileName);
+		}
+		// output numbers of spikes emitted by each neuron to a file, so as to be reusable in Matlab
+		if (sNumbersOutName != null)
+		{
+			System.out.println("Numbder of spikes emitted by each neuron written to file: " + sNumbersOutName);
+			// save them here by calling a method in NN
+			NN.writeNumbersOfSpikes(sNumbersOutName) ;
 		}
 		if (verbosity >= 1)
 			NN.displayNumberOfSpikes();

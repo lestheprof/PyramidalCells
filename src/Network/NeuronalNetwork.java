@@ -222,6 +222,34 @@ public class NeuronalNetwork {
 	}
 	
 	/**
+	 * Writes numbers of spikes to a file
+	 * @param fileName String name of file to be written to
+	 */
+	public void writeNumbersOfSpikes(String fileName) {
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(fileName);
+			for (int neuronNumber = 0; neuronNumber < neurons.length; neuronNumber++)
+			{
+				fileWriter.append(String.valueOf(neurons[neuronNumber].neuronID));
+				fileWriter.append(",") ;
+				fileWriter.append(String.valueOf(neurons[neuronNumber].spikesOut.size())) ;
+				fileWriter.append("\n");
+			}
+		}
+		catch (Exception e) {
+			System.out.println("NeuronalNetwork:writeNumbersOfSpikes error writing file " + fileName);
+		} finally {
+			try {
+				fileWriter.flush(); // flush and close file
+				fileWriter.close();
+			} catch (IOException e) {
+				System.out.println("Error while flushing/closing fileWriter !!!");
+			}
+		}			
+	}
+	
+	/**
 	 * Writes all spikes to a file, csv format
 	 * @param fileName String name of file to be written to
 	 */
