@@ -47,7 +47,7 @@ for spikeno = 2:nspikes
 end
 % sanity check
 if (endtime < outputarray(nspikes))
-    disp(['drivinginput1: last spike time exceeds expected duration. duration = ' num2str(duration) ' last spike time = ' num2str(outputarray(nspikes))]) ;
+    disp(['createSpikeTrain: last spike time exceeds expected duration. duration = ' num2str(duration) ' last spike time = ' num2str(outputarray(nspikes))]) ;
 end
 end
 

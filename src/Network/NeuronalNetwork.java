@@ -213,6 +213,15 @@ public class NeuronalNetwork {
 	}
 	
 	/**
+	 * display no of spikes generated at end of simulation
+	 */
+	public void displayNumberOfSpikes(){
+		for (int neuronNumber = 0; neuronNumber < neurons.length ; neuronNumber++){
+			System.out.println("Neuron " + neurons[neuronNumber].neuronID + " fired  "+ neurons[neuronNumber].spikesOut.size() + " times") ;
+		}
+	}
+	
+	/**
 	 * Writes all spikes to a file, csv format
 	 * @param fileName String name of file to be written to
 	 */

@@ -135,6 +135,9 @@ while(i<=size(varargin,2))
         case 'apical_gradient'
             apical_gradient = varargin{i+1}; 
             i=i+1 ;
+        case 'apical_multiplier'
+            apical_multiplier = varargin{i+1}; 
+            i=i+1 ;
         case 'axon_threshold'
            axon_threshold = varargin{i+1}; 
             i=i+1 ;
@@ -186,11 +189,14 @@ part1 = ['-fileprefix "' fileprefix '" -c "' c '" -d "' d '" -n "' n '" -sout "'
 part2 = [' -wc "' wc '" -wd "' wd '" -wi "' wi '" -t ' num2str(t) ' -s ' num2str(s) ] ;
 part3 = [' -alpha_context ' num2str(alpha_context) ' -alpha_driver ' num2str(alpha_driver) ' -alpha_internal_excitatory ' num2str(alpha_internal_excitatory) ] ;
 part4 = [' -alpha_internal_inhibitory ' num2str(alpha_internal_inhibitory) ' -apical_gradient ' num2str(apical_gradient) ' -axon_threshold ' num2str(axon_threshold)] ;
+part4a = [' -apical_multiplier ' num2str(apical_multiplier)] ;
 part5 = [' -i_refractory_period ' num2str(i_refractory_period) ' -inhibitory_threshold ' num2str(inhibitory_threshold) ' -p_refractory_period ' num2str(p_refractory_period)] ;
 part5a = [' -transferfunction ' num2str(transferfunction) ' -tf2_k1 ' num2str(tf2_k1) ' -tf2_k2 ' num2str(tf2_k2) ] ;
 part6 = [' -t_apical ' num2str(t_apical) ' -t_basal ' num2str(t_basal)  ' -t_inhib ' num2str(t_inhib) ' -v ' num2str(v) ' -debug ' num2str(debug)] ;
 % now actually run the simulation
-system([commandtorun part1 part2 part3 part4 part5 part5a part6]) ;
+system([commandtorun part1 part2 part3 part4 part4a part5 part5a part6]) ; 
+% note: can use this line to generate the command string for debugging in Eclipse.
+% fileprefix will need to be fully qualified, but otherwise it's usable. 
 
 end
 

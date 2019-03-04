@@ -298,7 +298,9 @@ public class RunNeuralNetwork {
 			// but there's no synapse number, just <neuron><time>, .csv format for maximal ease of reuse. 
 			NN.writeSpikes(spikeOutFileName);
 		}
-		if (verbosity >=1)
+		if (verbosity >= 1)
+			NN.displayNumberOfSpikes();
+		if (verbosity >=2)
 		{
 			System.out.println("Spikes Generated:") ;
 			NN.displaySpikes();
@@ -369,31 +371,40 @@ public class RunNeuralNetwork {
 
 		Path inputFilePath = Paths.get(filename);
 		try {
-		InputList = Files.readAllLines(inputFilePath);
-		} catch (IOException e)
-		{
-			System.err.println("readInputsToArrayFromFile: File= " + filename + " Caught IOException: " + e.getMessage());
-			System.exit(1); 
+			InputList = Files.readAllLines(inputFilePath);
+		} catch (IOException e) {
+			System.err
+					.println("readInputsToArrayFromFile: File= " + filename + " Caught IOException: " + e.getMessage());
+			System.exit(1);
+		}
+		/* cope with empty file */
+		if (InputList.isEmpty()) {
+			return null;
 		}
 
 		double[][] inputArray = new double[InputList.size()][numPerLine];
+
 		// now turn InputList into an array, line by line
 		Iterator<String> inputIterator = InputList.iterator();
 		while (inputIterator.hasNext()) {
 			String nextInput = inputIterator.next().trim();
-			String[] inputComponents = nextInput.split("\\s+|,", numPerLine); // allows spaces or single commas as separators
-			for (int i = 0; i < numPerLine; i++) {
-				try{
-				inputArray[lineNo][i] = Double.parseDouble(inputComponents[i]);
-				} catch (NumberFormatException e)
-				{
-					System.err.println("readInputsToArrayFromFile: File= " + filename + " Caught NumberFormatException: " + e.getMessage());
-					System.exit(1);
+			if (!nextInput.isEmpty()) {
+				// allows spaces or single commas as separators
+				String[] inputComponents = nextInput.split("\\s+|,", numPerLine); 
+				for (int i = 0; i < numPerLine; i++) {
+					try {
+						inputArray[lineNo][i] = Double.parseDouble(inputComponents[i]);
+					} catch (NumberFormatException e) {
+						System.err.println("readInputsToArrayFromFile: File= " + filename
+								+ " Caught NumberFormatException: " + e.getMessage());
+						System.exit(1);
+					}
+
 				}
-				
+				lineNo = lineNo + 1;
 			}
-			lineNo = lineNo + 1;
 		}
+
 		return inputArray;
 	}
 

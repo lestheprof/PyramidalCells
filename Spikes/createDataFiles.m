@@ -19,7 +19,7 @@ for trainno = 1:N
     train_c =  makeCSVarray(train, neuronid, 1) ;
     train_sorted = sortrows(train_c, 3) ;
     % write to file
-    csvwrite([fileprefix filenameroot '_' num2str(trainno)], train_sorted) ;
+    csvwrite([fileprefix filenameroot '_' num2str(trainno) '.csv'], train_sorted) ;
 end
 
 end
