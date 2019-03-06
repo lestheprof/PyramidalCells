@@ -70,7 +70,7 @@ i_refractory_period = 0 ;
 inhibitory_threshold = 1 ;
 % p_refractory_period followed by pyramidal neuron refractory period: default 0
 p_refractory_period = 0 ;
-% t_apical followed by time constant (tau) for basal dendrite: default 0.1
+% t_apical followed by time constant (tau) for apical dendrite: default 0.1
 t_apical = 0.1 ;
 % t_basal followed by time constant (tau) for basal dendrite: default 0.1
 t_basal = 0.1 ;

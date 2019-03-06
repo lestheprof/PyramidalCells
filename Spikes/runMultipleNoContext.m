@@ -1,7 +1,7 @@
-function  [spikesOutArray] = runMultiple(fileprefix, tf)
-%runMultiple Runs RunSpikeSimulator multiple times using different spike
-%rates. 
-%   Uased to run RunSpikeSimulator for a single set of parameters.
+function  [spikesOutArray] = runMultipleNoContext(fileprefix, tf)
+%runMultipleNoContext Runs RunSpikeSimulator multiple times using different spike
+%rates. Special one: context file is null.
+%   Used to run RunSpikeSimulator for a single set of parameters.
 %  For proper sciuentific usage, some of the fixed values need to
 %  be normal or varargin parameters so that a parameter search can be
 %  accompolished
@@ -12,11 +12,11 @@ function  [spikesOutArray] = runMultiple(fileprefix, tf)
 % set number of driving files
 driveno = 10 ;%10 ;
 % set number of context files
-contextno = 10 ; %10 ;
+contextno = 1; 
 % set drive file name prefix
 drivefileprefix = 'drive__' ;
 % set context name prefix
-contextfileprefix = 'context__' ;
+% contextfileprefix = 'context__' ;
 % set drive file weight name
 dwfile = 'drivingweights.txt' ;
 % set context file weight name
@@ -27,14 +27,14 @@ outfileprefix = 'nspikesmar042019_' ;
 for dd = 1:driveno
     dfname = [drivefileprefix num2str(dd) '.csv'] ;
     for cc = 1:contextno
-        cfname = [contextfileprefix num2str(cc) '.csv'] ;
+        % cfname = [contextfileprefix num2str(cc) '.csv'] ;
         outfilename = [outfileprefix num2str(dd) '_' num2str(cc) '.csv'] ;
         % and run it 
         RunSpikeSimulator('fileprefix', fileprefix, 'c', ...
-            cfname, 'd', dfname, 'v', 0, 'debug', 0, ...
+            '', 'd', dfname, 'v', 1, 'debug', 0, ...
             'wc', cwfile, 'wd', dwfile, ...
         't_basal', 0.2, 'apical_multiplier', 2.0, 'wi', '', ...
-         'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.002) ;
+         'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.002, 't_basal', 0.1, 't_apical', 0.2 ) ;
     end
 end
 
