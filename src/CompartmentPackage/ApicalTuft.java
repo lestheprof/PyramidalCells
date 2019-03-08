@@ -17,7 +17,9 @@ import SynapsePackage.*;
  */
 public class ApicalTuft extends AbstractCompartment {
 
-	public double tauApical ; // time constant
+	public double tauApicalTuft ; // time constant
+	public double logisticGradient ;
+	public double logisticIntercept ;
 	private ExternalSynapse[] extSynapses  = null;
 	// private InternalSynapse[] intSynapses  = null; now in AbstractCompartment
 	
@@ -30,17 +32,17 @@ public class ApicalTuft extends AbstractCompartment {
 	/**
 	 * @param neuron is the Pyramidal neuron object to which this apical tuft belongs
 	 * @param id identity of this compartment
-	 * @param tauApical is time constant for this compartment
+	 * @param tauApicalTuft is time constant for this compartment
 	 */
-	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApical, boolean debug) {
+	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApicalTuft, boolean debug) {
 		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
-		this.tauApical = tauApical ;
+		this.tauApicalTuft = tauApicalTuft ;
 		compartmentType = "Apical Tuft Compartment" ;
 		// calculate the leakiness per sample
-		if (tauApical == 0)
+		if (tauApicalTuft == 0)
 			this.activityChange = 0 ;
 		else
-			this.activityChange = Math.exp(- neuron.samplingInterval / tauApical) ; // pre-calculate amount by which activation decreases each time interval
+			this.activityChange = Math.exp(- neuron.samplingInterval / tauApicalTuft) ; // pre-calculate amount by which activation decreases each time interval
 	}
 	
 	public void setExternalSynapses(ExternalSynapse[] extSynapses){

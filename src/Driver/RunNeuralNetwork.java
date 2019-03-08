@@ -44,17 +44,21 @@ public class RunNeuralNetwork {
 	 * @param args: -fileprefix followed by a string, to be prepended to file names: must be before other file names
 	 * @param args: -i_refractory_period followed by inhibitory neuron refractory period: default 0
 	 * @param args: -inhibitory_threshold followed by inhibitory neuron threshold: default 1
-	 * @param args: -tf2_k1 followed by K1 value to use when transferfunction==2 is selected.
-	 * @param args: -tf2_k2 followed by K2 value to use when transferfunction==2 is selected.
+	 * @param args: -logisticGradientBasal followed by double defining logistic gradient for basal compartment
+	 * @param args: -logisticGradientTuft followed by double defining logistic gradient for apical tuft compartment
+	 * @param args: -logisticInterceptBasal followed by double defining logistic intercept for basal compartment
+	 * @param args: -logisticInterceptTuft followed by double defining logistic gradient for apical tuft compartment
 	 * @param args: -n followed by network specifier
 	 * @param args: -p_refractory_period followed by pyramidal neuron refractory period: default 0
 	 * @param args: -s followed by sampling rate (defaults to 10000)
 	 * @param args: -snumbersout followed by file name for number of spikes emitted by each neuron. default null.
 	 * @param args: -sout followed by spike output file name: will be csv, (neuron, time)
 	 * @param args: -t followed by end time (defaults to 5.0)
-	 * @param args: -t_apical followed by time constant (tau) for basal dendrite: default 0.1
+	 * @param args: -t_apicaltuft followed by time constant (tau) for apical tuft: default 0.1
 	 * @param args: -t_basal followed by time constant (tau) for basal dendrite: default 0.1
 	 * @param args: -t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
+	 * @param args: -tf2_k1 followed by K1 value to use when transferfunction==2 is selected.
+	 * @param args: -tf2_k2 followed by K2 value to use when transferfunction==2 is selected.
 	 * @param args: -transferfunction followed by 1 (original) or 2 (Kay and Phillips 2011) apical dendrite and axon hillock function selector
 	 * @param args: -v followed by verbosity: controls amount of system.out data created: default 1
 	 * @param args: -wc followed by weight file for contextual inputs
@@ -80,7 +84,12 @@ public class RunNeuralNetwork {
 		double deltaTime ; // interval between samples
 		
 		double tauBasal = 0.1 ; // time constant for basal compartment
-		double tauApical = 0.1 ; // time constant for apical compartment
+		double logisticGradientBasal = 3.0 ; // logistic gradient for basal compartment
+		double logisticInterceptBasal = 0.5 ; // logistic intercept (offset) for basal compartment
+		double tauApicalTuft = 0.1 ; // time constant for apical tuft compartment
+		double logisticGradientTuft = 3.0 ; // logistic gradient for apical tuft compartment
+		double logisticInterceptTuft = 0.5 ; // logistic intercept (offset) for apical tuft compartment
+
 		double tauInhib = 0.2 ; // time constant for inhibitory interneuron single compartment
 		
 		double alphaDriving = 1000 ; // alpha value for driving synapses
@@ -165,8 +174,8 @@ public class RunNeuralNetwork {
 				tauBasal = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
-			case "-t_apical": // time constant (tau) for basal dendrite
-				tauApical = Double.parseDouble(args[argno + 1]) ;
+			case "-t_apicaltuft": // time constant (tau) for apical tuft dendrite
+				tauApicalTuft = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break ;
 			case "-t_inhib": // time constant (tau) for simple leaky compartment used in inhibitory neurons
@@ -199,6 +208,22 @@ public class RunNeuralNetwork {
 				break  ;
 			case "-transferfunction":
 				transferfunction = Integer.parseInt(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break   ;
+			case "-logisticgradientbasal":
+				logisticGradientBasal = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break   ;
+			case "-logisticgradienttuft":
+				logisticGradientTuft = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break   ;
+			case "-logisticinterceptbasal":
+				logisticInterceptBasal = Double.parseDouble(args[argno + 1]) ;
+				argno = argno + 2 ;
+				break   ;
+			case "-logisticintercepttuft":
+				logisticInterceptTuft = Double.parseDouble(args[argno + 1]) ;
 				argno = argno + 2 ;
 				break   ;
 			case "-tf2_k1":
@@ -247,7 +272,8 @@ public class RunNeuralNetwork {
 		for (int nno = 0; nno < numberOfNeurons; nno++)
 		{
 			if (networkData[nno] == 'P')
-					networkInfo[nno]  = new PyramidalNeuronInfo(nno + 1, samplingRate, tauBasal, tauApical, apicalMultiplier, 
+					networkInfo[nno]  = new PyramidalNeuronInfo(nno + 1, samplingRate, tauBasal, logisticGradientBasal,
+							logisticInterceptBasal, tauApicalTuft, logisticGradientTuft, logisticInterceptTuft, apicalMultiplier, 
 				apicalGradient, pyrThreshold, pyrRefractoryPeriod, transferfunction, K1, K2) ;
 			else if (networkData[nno] == 'I')
 				networkInfo[nno]  = new InterNeuronInfo(nno + 1, samplingRate, tauInhib, inhThreshold, inhRefractoryPeriod) ;

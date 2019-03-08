@@ -18,6 +18,8 @@ import SynapsePackage.*;
 public class BasalDendrite extends AbstractCompartment {
 
 	public double tauBasal ; // time constant for this compartment
+	public double logisticGradient ;
+	public double logisticIntercept ;
 	private ExternalSynapse[]  extSynapses  = null;
 	// private InternalSynapse[] intSynapses  = null; now in AbstractSynapse
 	public double internalActivation ;

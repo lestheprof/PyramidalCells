@@ -26,7 +26,7 @@ public class PyramidalNeuron extends AbstractNeuron {
 	 * ID String identity of the neuron
 	 * samplingRate is sampling rate used to convert times to sample numbers
 	 * tauBasal is time constant for basal dendrites
-	 * tauApical is time constant for Apical tuft dendrites
+	 * tauApicalTuft is time constant for Apical tuft dendrites
 	 */
 	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical, 
 			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod, 
@@ -56,12 +56,12 @@ public class PyramidalNeuron extends AbstractNeuron {
 		this.transferfunction = p1.transferfunction ;
 		this.K1 = p1.K1 ;
 		this.K2 = p1.K2 ;
-		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApical, debug) ;
+		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApicalTuft, debug) ; // needs grad, intercept added
 		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3, p1.transferfunction,
 			debug) ;
 		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod, transferfunction, p1.K1, p1.K2, debug) ;
 		this.spikingCompartment = this.axonHillock ;
-		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal, debug) ;
+		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal, debug) ;  // needs grad, intercept added
 		this.spikesOut = new ArrayList<> () ;
 
 		
