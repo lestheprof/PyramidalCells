@@ -25,7 +25,8 @@ public class ApicalTuft extends AbstractCompartment {
 	
 	public double internalActivation ;
 	public double externalActivation ;
-	
+	public double prelogisticActivation; // internal compartmental variable counting internal activation 
+
 	public double activityChange ;
 
 	
@@ -33,16 +34,22 @@ public class ApicalTuft extends AbstractCompartment {
 	 * @param neuron is the Pyramidal neuron object to which this apical tuft belongs
 	 * @param id identity of this compartment
 	 * @param tauApicalTuft is time constant for this compartment
+	 * @param logisticGradient is steepness of logistic applies
+	 * @param logisticIntercept is offset of logistic function to be applied
 	 */
-	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApicalTuft, boolean debug) {
+	public ApicalTuft(PyramidalNeuron neuron, int id, double tauApicalTuft, double logisticGradient, double logisticIntercept,  boolean debug) {
 		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		this.tauApicalTuft = tauApicalTuft ;
 		compartmentType = "Apical Tuft Compartment" ;
+		this.prelogisticActivation = 0 ;
 		// calculate the leakiness per sample
 		if (tauApicalTuft == 0)
 			this.activityChange = 0 ;
 		else
 			this.activityChange = Math.exp(- neuron.samplingInterval / tauApicalTuft) ; // pre-calculate amount by which activation decreases each time interval
+		// values for logistic function
+		this.logisticGradient = logisticGradient ;
+		this.logisticIntercept = logisticIntercept ;
 	}
 	
 	public void setExternalSynapses(ExternalSynapse[] extSynapses){
@@ -85,7 +92,9 @@ public class ApicalTuft extends AbstractCompartment {
 				}
 				this.internalActivation = internalActivation ;
 				this.externalActivation = externalActivation ;
-				this.activation = (this.activation * this.activityChange) + this.internalActivation + this.externalActivation ;
+				this.prelogisticActivation = (this.prelogisticActivation * this.activityChange) + this.internalActivation + this.externalActivation ;
+				// now apply logistic to calculate output
+				this.activation = 1.0 / (1 + Math.exp(-(this.logisticGradient * this.prelogisticActivation - this.logisticIntercept))) ;
 	}
 
 }

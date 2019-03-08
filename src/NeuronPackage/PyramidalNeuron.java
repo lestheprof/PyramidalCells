@@ -26,10 +26,18 @@ public class PyramidalNeuron extends AbstractNeuron {
 	 * ID String identity of the neuron
 	 * samplingRate is sampling rate used to convert times to sample numbers
 	 * tauBasal is time constant for basal dendrites
+	 * logisticGradientBasal gradient for Basal compartment
+	 * logisticInterceptBasal intercept for Basal compartment
 	 * tauApicalTuft is time constant for Apical tuft dendrites
+	 * logisticGradientTuft gradient for apical tuft compartment
+	 * logisticInterceptTuft gradient for tuft compartment
+	 * apical_multiplier multiplier used in apical dendrite compartment
+	 * apical_gradient gradient used in apical compartment
+	 * threshold for axon hillock
+	 * 
 	 */
-	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double tauApical, 
-			double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod, 
+	public PyramidalNeuron(int ID, int samplingRate, double tauBasal, double logisticGradientBasal, double logisticInterceptBasal, double tauApicalTuft, 
+			double logisticGradientTuft, double logisticInterceptTuft, double apical_multiplier ,double apical_gradient, double threshold, double refractoryPeriod, 
 			int transferfunction, double K1, double K2, boolean debug) {
 		super(ID, samplingRate, debug);
 // set up the compartments of this neuron
@@ -37,11 +45,11 @@ public class PyramidalNeuron extends AbstractNeuron {
 		this.transferfunction = transferfunction ;
 		this.K1 = K1 ;
 		this.K2 = K2 ;
-		this.apicalTuft = new ApicalTuft(this, 2, tauApical, debug) ;
+		this.apicalTuft = new ApicalTuft(this, 2, tauApicalTuft, logisticGradientTuft,  logisticInterceptTuft, debug) ;
 		this.apicalDendrite = new ApicalDendrite(this,apical_multiplier, apical_gradient, 3, transferfunction, debug) ;
 		this.axonHillock = new AxonHillock(this,4, threshold, refractoryPeriod, transferfunction, K1, K2, debug) ;
 		this.spikingCompartment = this.axonHillock ;
-		this.basalDendrite = new BasalDendrite(this, 1, tauBasal, debug) ;
+		this.basalDendrite = new BasalDendrite(this, 1, tauBasal,logisticGradientBasal,  logisticInterceptBasal,  debug) ;
 		this.spikesOut = new ArrayList<> () ;
 
 	}
@@ -56,12 +64,12 @@ public class PyramidalNeuron extends AbstractNeuron {
 		this.transferfunction = p1.transferfunction ;
 		this.K1 = p1.K1 ;
 		this.K2 = p1.K2 ;
-		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApicalTuft, debug) ; // needs grad, intercept added
+		this.apicalTuft = new ApicalTuft(this, 2, p1.tauApicalTuft, p1.logisticGradientTuft, p1.logisticInterceptTuft, debug) ; // needs grad, intercept added
 		this.apicalDendrite = new ApicalDendrite(this, p1.apicalMultiplier, p1.apicalGradient, 3, p1.transferfunction,
 			debug) ;
 		this.axonHillock = new AxonHillock(this,4, p1.threshold, p1.refractoryPeriod, transferfunction, p1.K1, p1.K2, debug) ;
 		this.spikingCompartment = this.axonHillock ;
-		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal, debug) ;  // needs grad, intercept added
+		this.basalDendrite = new BasalDendrite(this, 1, p1.tauBasal,p1.logisticGradientBasal, p1.logisticInterceptBasal, debug) ;  // needs grad, intercept added
 		this.spikesOut = new ArrayList<> () ;
 
 		
@@ -206,6 +214,9 @@ public class PyramidalNeuron extends AbstractNeuron {
 			// but what else?
 			// reset the activation of the Basal Dendrite
 			basalDendrite.activation = 0 ;
+			basalDendrite.prelogisticActivation = 0 ; // set local variable to 0 as well
+			// what should we do about the apical compartment activation?
+			apicalTuft.prelogisticActivation = 0 ;
 		}
 		else this.justSpiked = false ;
 		if (debug){

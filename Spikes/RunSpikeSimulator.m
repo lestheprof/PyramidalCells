@@ -69,9 +69,18 @@ i_refractory_period = 0 ;
 % inhibitory_threshold followed by inhibitory neuron threshold: default 1
 inhibitory_threshold = 1 ;
 % p_refractory_period followed by pyramidal neuron refractory period: default 0
+% values for logistic functions
+
+logisticGradientBasal = 1.0 ;
+logisticGradientTuft = 1.0 ;
+logisticInterceptBasal = 0 ;
+logisticInterceptTuft = 0 ;
+
+
+
 p_refractory_period = 0 ;
 % t_apical followed by time constant (tau) for apical dendrite: default 0.1
-t_apical = 0.1 ;
+t_apicaltuft = 0.1 ;
 % t_basal followed by time constant (tau) for basal dendrite: default 0.1
 t_basal = 0.1 ;
 % t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
@@ -161,8 +170,20 @@ while(i<=size(varargin,2))
         case 'p_refractory_period'
             p_refractory_period = varargin{i+1}; 
             i=i+1 ;
-        case 't_apical'
-            t_apical = varargin{i+1}; 
+        case 't_apicaltuft'
+            t_apicaltuft = varargin{i+1}; 
+            i=i+1 ;
+        case 'logisticgradientbasal'
+            logisticGradientBasal = varargin{i+1}; 
+            i=i+1 ;
+        case 'logisticgradienttuft'
+            logisticGradientTuft = varargin{i+1}; 
+            i=i+1 ;
+        case 'logisticinterceptbasal'
+            logisticInterceptBasal = varargin{i+1}; 
+            i=i+1 ;
+        case 'logisticintercepttuft'
+            logisticInterceptTuft = varargin{i+1}; 
             i=i+1 ;
         case 't_basal'
             t_basal = varargin{i+1}; 
@@ -203,9 +224,11 @@ part4 = [' -alpha_internal_inhibitory ' num2str(alpha_internal_inhibitory) ' -ap
 part4a = [' -apical_multiplier ' num2str(apical_multiplier)] ;
 part5 = [' -i_refractory_period ' num2str(i_refractory_period) ' -inhibitory_threshold ' num2str(inhibitory_threshold) ' -p_refractory_period ' num2str(p_refractory_period)] ;
 part5a = [' -transferfunction ' num2str(transferfunction) ' -tf2_k1 ' num2str(tf2_k1) ' -tf2_k2 ' num2str(tf2_k2) ] ;
-part6 = [' -t_apical ' num2str(t_apical) ' -t_basal ' num2str(t_basal)  ' -t_inhib ' num2str(t_inhib) ' -v ' num2str(v) ' -debug ' num2str(debug)] ;
+part5b = [' -logisticGradientBasal ' num2str(logisticGradientBasal) ' -logisticGradientTuft ' num2str(logisticGradientTuft) ] ;
+part5c = [' -logisticInterceptBasal ' num2str(logisticInterceptBasal) ' -logisticInterceptTuft ' num2str(logisticInterceptTuft) ] ;
+part6 = [' -t_apicaltuft ' num2str(t_apicaltuft) ' -t_basal ' num2str(t_basal)  ' -t_inhib ' num2str(t_inhib) ' -v ' num2str(v) ' -debug ' num2str(debug)] ;
 % now actually run the simulation
-system([commandtorun part1 part2 part3 part4 part4a part5 part5a part6]) ; 
+system([commandtorun part1 part2 part3 part4 part4a part5 part5a part5b part5c part6]) ; 
 % note: can use this line to generate the command string for debugging in Eclipse.
 % fileprefix will need to be fully qualified, but otherwise it's usable. 
 

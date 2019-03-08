@@ -20,6 +20,8 @@ public double refractoryPeriod = 0.02 ;
 public int transferfunction = 1;
 private double K1 = 0.5 ; // for use with transfer function  == 2, from Kay & Phillips 2011
 private double K2 = 1 ; // for use with transfer function  == 2, from Kay & Phillips 2011
+
+private boolean errorReported = false ;
 /**
  * 
  * @param neuron neuron is the Pyramidal neuron object to which this axon hillock belongs
@@ -45,13 +47,21 @@ private double K2 = 1 ; // for use with transfer function  == 2, from Kay & Phil
 	public Boolean runAndSpike(double currentTime){
 		PyramidalNeuron neuron = (PyramidalNeuron) this.myNeuron ;
 		if (transferfunction == 1)
-		// calculate activation by multiplying basal dendrite activation by apical dendrite activation
-			this.activation = neuron.apicalDendrite.activation * neuron.basalDendrite.activation;
+			// apply A(r, c) = r[k1 + (1 − k1) exp(k2rc)] from Kay & Phillips 2011
+						this.activation = neuron.basalDendrite.activation * 
+							(K1 + (1-K1) * Math.exp(K2 * neuron.basalDendrite.activation * neuron.apicalDendrite.activation)) ;
+
 		else if (transferfunction == 2)
+		{
 			// apply A(r, c) = r[k1 + (1 − k1) exp(k2rc)] from Kay & Phillips 2011
 			this.activation = neuron.basalDendrite.activation * 
 				(K1 + (1-K1) * Math.exp(K2 * neuron.basalDendrite.activation * neuron.apicalDendrite.activation)) ;
-			
+			if (!errorReported)
+			{
+				System.out.println("ApicalDendrite: run: transferfunction = " + transferfunction + "value ignored.");
+				errorReported = true ;
+			}
+		}	
 		if (this.activation > this.threshold)
 		{
 			this.activation = resetValue ; // not really useful, as the activation does not have any historic information: it's reset each time. 

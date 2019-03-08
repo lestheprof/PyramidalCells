@@ -24,6 +24,7 @@ public class BasalDendrite extends AbstractCompartment {
 	// private InternalSynapse[] intSynapses  = null; now in AbstractSynapse
 	public double internalActivation ;
 	public double externalActivation ;
+	public double prelogisticActivation; // internal compartmental variable counting internal activation
 	double activityChange ;
 	
 	// private boolean debug = true ; now in AbstractCompartment
@@ -33,8 +34,10 @@ public class BasalDendrite extends AbstractCompartment {
  * @param neuron neuron is the Pyramidal neuron object to which this basal dendrite belongs
  * @param id id of this compartment
  * @param tauBasal tau value for leakage of this compartment
+ * @param logisticGradient is steepness of logistic applies
+ * @param logisticIntercept is offset of logistic function to be applied
  */
-	public BasalDendrite(PyramidalNeuron neuron, int id, double tauBasal, boolean debug) {
+	public BasalDendrite(PyramidalNeuron neuron, int id, double tauBasal,  double logisticGradient, double logisticIntercept, boolean debug) {
 		super(neuron, id, debug) ; // so compartment knows its neuron id and its own id
 		this.tauBasal = tauBasal ;
 		compartmentType = "Basal Dendrite Compartment" ;
@@ -43,6 +46,10 @@ public class BasalDendrite extends AbstractCompartment {
 			this.activityChange = 0; 
 		else
 		 this.activityChange = Math.exp(- neuron.samplingInterval / tauBasal) ; // pre-calculate amount by which activation decreases each time interval
+		this.prelogisticActivation = 0 ;
+		// values for logistic function
+		this.logisticGradient = logisticGradient ;
+		this.logisticIntercept = logisticIntercept ;
 	}
 	
 	public void setExternalSynapses(ExternalSynapse[] extSynapses){
@@ -85,7 +92,9 @@ public class BasalDendrite extends AbstractCompartment {
 		}
 		this.internalActivation = internalActivation ;
 		this.externalActivation = externalActivation ;
-		this.activation = (this.activation * this.activityChange) + this.internalActivation + this.externalActivation ;
+		this.prelogisticActivation = (this.prelogisticActivation * this.activityChange) + this.internalActivation + this.externalActivation ;
+		// now apply logistic to calculate output
+		this.activation = 1.0 / (1 + Math.exp(-(this.logisticGradient * this.prelogisticActivation - this.logisticIntercept))) ;
 		
 	}
 
