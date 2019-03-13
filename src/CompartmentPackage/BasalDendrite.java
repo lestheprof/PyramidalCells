@@ -94,7 +94,7 @@ public class BasalDendrite extends AbstractCompartment {
 		this.externalActivation = externalActivation ;
 		this.prelogisticActivation = (this.prelogisticActivation * this.activityChange) + this.internalActivation + this.externalActivation ;
 		// now apply logistic to calculate output
-		this.activation = 1.0 / (1 + Math.exp(-(this.logisticGradient * this.prelogisticActivation - this.logisticIntercept))) ;
+		this.activation = 1.0 / (1 + Math.exp(-(this.logisticGradient * (this.prelogisticActivation - this.logisticIntercept)))) ;
 		
 	}
 
