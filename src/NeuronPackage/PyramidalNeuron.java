@@ -191,20 +191,20 @@ public class PyramidalNeuron extends AbstractNeuron {
 	public void run(double currentTime){
 		// run neuron for a single time step
 		basalDendrite.run(currentTime); // update state of basal dendrite
-		if (debug){
-			if (basalDendrite.activation > 0)
-				System.out.println("time = " + currentTime + " Basal D activation = " + basalDendrite.activation);
-		}
+//		if (debug){
+//			if (basalDendrite.activation > 0)
+//				System.out.println("time = " + currentTime + " Basal D activation = " + basalDendrite.activation);
+//		}
 		apicalTuft.run(currentTime); // update state of  apical dendrite
-		if (debug){
-			if (apicalTuft.activation > 0)
-				System.out.println("time = " + currentTime + " Apical Tuft activation = " + apicalTuft.activation);
-		}
+//		if (debug){
+//			if (apicalTuft.activation > 0)
+//				System.out.println("time = " + currentTime + " Apical Tuft activation = " + apicalTuft.activation);
+//		}
 		apicalDendrite.run(currentTime); // use the above two to nonlinearly mix
-		if (debug){
-			//  (apicalDendrite.activation > 0)
-				System.out.println("time = " + currentTime + " apical Dendrite activation = " + apicalDendrite.activation);
-		}
+//		if (debug){
+//			//  (apicalDendrite.activation > 0)
+//				System.out.println("time = " + currentTime + " apical Dendrite activation = " + apicalDendrite.activation);
+//		}
 		// what's below won't work: needs the code of the runs above to be instantiated (done)
 		if (axonHillock.runAndSpike(currentTime)) // attempt to generate output spikes
 		{
@@ -213,15 +213,16 @@ public class PyramidalNeuron extends AbstractNeuron {
 			spikesOut.add(currentTime) ; // add to list of spikes
 			// but what else?
 			// reset the activation of the Basal Dendrite
-			basalDendrite.activation = 0 ;
+			// basalDendrite.activation = 0 ;
 			basalDendrite.prelogisticActivation = 0 ; // set local variable to 0 as well
 			// what should we do about the apical compartment activation?
 			apicalTuft.prelogisticActivation = 0 ;
 		}
 		else this.justSpiked = false ;
 		if (debug){
-			if (axonHillock.activation > 0)
-				System.out.println("time = " + currentTime + " axon Hillock activation = " + axonHillock.activation);
+			// if (axonHillock.activation > 0)
+				System.out.println(currentTime + "," +  basalDendrite.activation + "," + apicalTuft.activation + "," +
+						+ apicalDendrite.activation + "," + axonHillock.activation);
 		}
 	}
 	

@@ -25,8 +25,15 @@ dwfile = 'drivingweights.txt' ;
 % set context file weight name
 cwfile = 'contextweights.txt' ;
 % set outputfile prefix
-outfileprefix = 'nspikesmar042019_' ;
+outfileprefix = 'nspikesmar142019_' ;
 %
+% runing simulated time
+runtime = 5 ;
+% defaults for logistic functions.
+logisticGradientBasal = 1.0 ;
+logisticGradientTuft = 1.0 ;
+logisticInterceptBasal = 0 ;
+logisticInterceptTuft = 0 ;
 
 % use varargin to overwrite parameter values
 i=1 ;
@@ -44,15 +51,18 @@ while(i<=size(varargin,2))
         case 'logisticintercepttuft'
             logisticInterceptTuft = varargin{i+1};
             i=i+1 ;
+        case 't' % running time
+            runtime = varargin{i+1};
+            i=i+1 ;
         otherwise
             error('runMultiple: Unknown argument %s given',varargin{i});
     end
     i=i+1 ;
 end
 
-for dd = 1:driveno
+for dd = 1:10
     dfname = [drivefileprefix num2str(dd) '.csv'] ;
-    for cc = 0:contextno
+    for cc = 0:10
         if (cc == 0) 
             cfname = '' ; % no context at all
         else
@@ -61,9 +71,9 @@ for dd = 1:driveno
         outfilename = [outfileprefix num2str(dd) '_' num2str(cc) '.csv'] ;
         % and run it 
         RunSpikeSimulator('fileprefix', fileprefix, 'c', ...
-            cfname, 'd', dfname, 'v', 0, 'debug', 0, ...
+            cfname,'t', runtime , 'd', dfname, 'v', 0, 'debug', 0, ...
             'wc', cwfile, 'wd', dwfile, ...
-        't_basal', 0.2, 'apical_multiplier', 2.0, 'wi', '', ...
+        't_basal', 0.05, 't_apicaltuft', 0.05, 'alpha_context', 400, 'alpha_driver', 400, 'apical_multiplier', 1.0, 'wi', '', ...
          'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.002, ...
      'logisticGradientBasal',   logisticGradientBasal,  'logisticGradientTuft', logisticGradientTuft, ... 
      'logisticInterceptBasal', logisticInterceptBasal, 'logisticInterceptTuft', logisticInterceptTuft ...
