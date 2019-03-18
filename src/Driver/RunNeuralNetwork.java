@@ -60,7 +60,7 @@ public class RunNeuralNetwork {
 	 * @param args: -tf2_k1 followed by K1 value to use when transferfunction==2 is selected.
 	 * @param args: -tf2_k2 followed by K2 value to use when transferfunction==2 is selected.
 	 * @param args: -transferfunction followed by 1 (original) or 2 (Kay and Phillips 2011) apical dendrite and axon hillock function selector
-	 * @param args: -v followed by verbosity: controls amount of system.out data created: default 1
+	 * @param args: -v followed by verbosity: controls amount of system.out data created: default 1. 0 is silent running
 	 * @param args: -wc followed by weight file for contextual inputs
 	 * @param args: -wd followed by weight file for driving inputs
 	 * @param args: -wi followed by weight and delay file for internal synapses
@@ -320,7 +320,8 @@ public class RunNeuralNetwork {
 		// simulation loop
 		currentTime = 0 ; // start at 0
 		deltaTime = 1.0/samplingRate ; // time increment (sample interval)
-		System.out.println("Simulation starting");
+		if (verbosity >= 1)
+			System.out.println("Simulation starting");
 
 		while (currentTime < endTime){
 			// run neuron 1 time step
@@ -340,7 +341,8 @@ public class RunNeuralNetwork {
 		// output numbers of spikes emitted by each neuron to a file, so as to be reusable in Matlab
 		if (sNumbersOutName != null)
 		{
-			System.out.println("Numbder of spikes emitted by each neuron written to file: " + sNumbersOutName);
+			if (verbosity >= 1)
+				System.out.println("Number of spikes emitted by each neuron written to file: " + sNumbersOutName);
 			// save them here by calling a method in NN
 			NN.writeNumbersOfSpikes(sNumbersOutName) ;
 		}
@@ -351,7 +353,8 @@ public class RunNeuralNetwork {
 			System.out.println("Spikes Generated:") ;
 			NN.displaySpikes();
 		}
-		System.out.println("Simulation ended");
+		if (verbosity >= 1)
+			System.out.println("Simulation ended");
 		
 	}
 	

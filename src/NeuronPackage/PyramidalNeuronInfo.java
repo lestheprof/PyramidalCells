@@ -26,7 +26,7 @@ public class PyramidalNeuronInfo extends NeuronInfo {
 		super(identity, samplingRate) ; // for all sorts of neurons
 		this.tauBasal = tauBasal ;
 		this.logisticGradientBasal = logisticGradientBasal;
-		this.logisticInterceptBasal = logisticInterceptTuft ;
+		this.logisticInterceptBasal = logisticInterceptBasal ;
 		this.tauApicalTuft = tauApicalTuft ;
 		this.logisticGradientTuft = logisticGradientTuft ;
 		this.logisticInterceptTuft = logisticInterceptTuft ;
