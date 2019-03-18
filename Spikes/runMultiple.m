@@ -60,7 +60,7 @@ while(i<=size(varargin,2))
     i=i+1 ;
 end
 
-for dd = 1:10
+for dd = 0:10
     dfname = [drivefileprefix num2str(dd) '.csv'] ;
     for cc = 0:10
         if (cc == 0) 
@@ -74,7 +74,7 @@ for dd = 1:10
             cfname,'t', runtime , 'd', dfname, 'v', 0, 'debug', 0, ...
             'wc', cwfile, 'wd', dwfile, ...
         't_basal', 0.05, 't_apicaltuft', 0.05, 'alpha_context', 400, 'alpha_driver', 400, 'apical_multiplier', 1.0, 'wi', '', ...
-         'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.002, ...
+         'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.012, ...
      'logisticGradientBasal',   logisticGradientBasal,  'logisticGradientTuft', logisticGradientTuft, ... 
      'logisticInterceptBasal', logisticInterceptBasal, 'logisticInterceptTuft', logisticInterceptTuft ...
      ) ;
@@ -84,9 +84,9 @@ end
 % now read the snumbersout files and create a 2D array from them
 % may then delete these files (otherwise there's an awful lot of files
 % generated)
-spikesOutArray = zeros([driveno contextno + 1]) ;
-for dd = 1:driveno
-    dfnostring = num2str(dd) ;
+spikesOutArray = zeros([driveno+1 contextno + 1]) ; % both now have a number 0
+for dd = 1:driveno+1
+    dfnostring = num2str(dd-1) ;
     for cc = 1:contextno + 1
         filedata = csvread([fileprefix outfileprefix dfnostring '_' num2str(cc - 1) '.csv']) ;
         spikesOutArray(dd, cc) = filedata(1, 2) ;
