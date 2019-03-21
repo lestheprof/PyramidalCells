@@ -35,8 +35,8 @@ public class RunNeuralNetwork {
 	 * @param args: -alpha_driver followed by alpha value for driving synapses: default 1000
 	 * @param args: -alpha_internal_excitatory followed by alpha value for internal excitatory synapses: default 900
 	 * @param args: -alpha_internal_inhibitory followed by alpha value for internal inhibitory synapses: default 200
-	 * @param args: -apical_gradient followed by apical gradient for apical dendrite: default 1
-	 * @param args: -apical_multiplier followed by apical multiplier for apical dendrite: default 1
+	 * @param args: -apical_gradient followed by apical gradient for apical dendrite: default 1 (not used)
+	 * @param args: -apical_multiplier followed by apical multiplier for apical dendrite: default 2
 	 * @param args: -axon_threshold followed by axon threshold: default 1 (named pyr_threshold)
 	 * @param args: -c input spike file name, get file name for external contextual spike inputs
 	 * @param args: -d followed by input spike file name, so get file name for external driving spike inputs
@@ -59,7 +59,7 @@ public class RunNeuralNetwork {
 	 * @param args: -t_inhib followed by time constant (tau) for simple leaky compartment used in inhibitory neurons: default 0.2
 	 * @param args: -tf2_k1 followed by K1 value to use when transferfunction==2 is selected.
 	 * @param args: -tf2_k2 followed by K2 value to use when transferfunction==2 is selected.
-	 * @param args: -transferfunction followed by 1 (original) or 2 (Kay and Phillips 2011) apical dendrite and axon hillock function selector
+	 * @param args: -transferfunction followed by 1  (Kay and Phillips 2011) basal, apical dendrite and axon hillock function selector
 	 * @param args: -v followed by verbosity: controls amount of system.out data created: default 1. 0 is silent running
 	 * @param args: -wc followed by weight file for contextual inputs
 	 * @param args: -wd followed by weight file for driving inputs
@@ -97,11 +97,11 @@ public class RunNeuralNetwork {
 		double alphaInternalExcitatory = 900 ; // alpha value for internal excitatory sysnapses
 		double alphaInternalInhibitory = 200 ; // alpha value for internal inhibitory sysnapses
 		
-		double apicalMultiplier = 1 ; // multiplier for apical dendrite: output = mult * logistic(gradient * input)
-		double apicalGradient = 1 ;
+		double apicalMultiplier = 2 ; // multiplier for apical dendrite: output = mult * logistic(gradient * input)
+		double apicalGradient = 1 ; // not used
 		int transferfunction = 1 ; // defines the transfer function used in apical dendrite & axon hillock
-		double K1 = 0.5 ; // for use with transfer function  == 2 (TF2_K1), from Kay & Phillips 2011
-		double K2 = 1 ; // for use with transfer function  == 2 (TF2_K2), from Kay & Phillips 2011
+		double K1 = 0.5 ; // for use with transfer function  from Kay & Phillips 2011
+		double K2 = 1 ; // for use with transfer function  from Kay & Phillips 2011
 		
 		double pyrThreshold = 1 ; // threshold for axon hillock
 		double inhThreshold = 1 ; // threshold for inhbitory neurons

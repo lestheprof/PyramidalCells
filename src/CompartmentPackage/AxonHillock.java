@@ -18,8 +18,8 @@ private double resetValue = 0 ;
 // private double lastSpikeTime = -1 ; // -ve to show no previous spikes: now in AbstractSpikingCompartment
 public double refractoryPeriod = 0.02 ;
 public int transferfunction = 1;
-private double K1 = 0.5 ; // for use with transfer function  == 2, from Kay & Phillips 2011
-private double K2 = 1 ; // for use with transfer function  == 2, from Kay & Phillips 2011
+private double K1 = 0.5 ; // for use with transfer function  from Kay & Phillips 2011
+private double K2 = 1 ; // for use with transfer function from Kay & Phillips 2011: this value expects th3 apical *ier to be 2
 
 private boolean errorReported = false ;
 /**

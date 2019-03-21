@@ -194,10 +194,10 @@ while(i<=size(varargin,2))
         case 'transferfunction'
             transferfunction  = varargin{i+1}; 
             i=i+1 ;
-        case 'tfr_k1'
+        case 'tf2_k1'
             tf2_k1 = varargin{i+1}; 
             i=i+1 ;
-        case 'tfr_k2'
+        case 'tf2_k2'
             tf2_k2 = varargin{i+1}; 
             i=i+1 ;
         case 'v'

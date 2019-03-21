@@ -85,7 +85,7 @@ public class ApicalTuft extends AbstractCompartment {
 					while (synIterator.hasNext())
 						internalActivation = internalActivation + synIterator.next().runStep(currentTime);
 					}
-				if (!(extSynapses == null)) // if there's no external synapses
+				if (!(extSynapses == null)) // if there's external synapses
 				for (int synapseNo = 1 ; synapseNo < extSynapses.length; synapseNo ++)
 				{
 					externalActivation = externalActivation + extSynapses[synapseNo].runStep(currentTime) ;

@@ -15,7 +15,7 @@ import NeuronPackage.PyramidalNeuron;
  * @author lss
  */
 public class ApicalDendrite extends AbstractCompartment {
-public double multiplier = 1 ;  
+public double multiplier = 2 ;  // expected default value. when K2 in axon hillock = 1
 public double gradient = 1 ;
 PyramidalNeuron neuron = null ;
 public int transferfunction = 1 ; // use to choose transfer function
@@ -48,11 +48,11 @@ private boolean errorReported = false ;
 		{
 			// simply scale the apical tuft activation
 			this.activation = multiplier * neuron.apicalTuft.activation ;
-			if (!errorReported)
-			{
-				System.out.println("ApicalDendrite: run: transferfunction = " + transferfunction + "value ignored.");
-				errorReported = true ;
-			}
+		}
+		else if (!errorReported)
+		{
+			System.out.println("ApicalDendrite: run: transferfunction = " + transferfunction + "value ignored.");
+			errorReported = true ;
 		}
 		// end if		
 	}

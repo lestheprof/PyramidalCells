@@ -11,9 +11,13 @@ function  [spikesOutArray] = runMultipleIntercept(fileprefix, varargin)
 %
 %
 % set number of context intercept levels
-driveintercepts = 20 ;%10 ;
+driveintercepts = 10 ;%10 ;
 % set number of driving intercept levels
-contextintercepts = 25 ; %10 ;
+contextintercepts = 12 ; %10 ;
+% multiplier for apical dendrite
+apicalmultiplier = 1 ;
+% K2 parameter for axon hillock
+tf2_k2 = 2 ;
 % set drive file name prefix
 drivefileprefix = 'drive__' ;
 % set context name prefix
@@ -68,6 +72,12 @@ while(i<=size(varargin,2))
         case 't' % running time
             runtime = varargin{i+1};
             i=i+1 ;
+        case 'apicalmultiplier'
+            apicalmultiplier= varargin{i+1};
+            i=i+1 ;
+        case 'tf2_k2'
+            tf2_k2 = varargin{i+1};
+            i=i+1 ;
         otherwise
             error('runMultiple: Unknown argument %s given',varargin{i});
     end
@@ -89,8 +99,8 @@ for bi = 1:driveintercepts
         RunSpikeSimulator('fileprefix', fileprefix, 'c', ...
             cfname,'t', runtime , 'd', dfname, 'v', 1, 'debug', 0, ...
             'wc', cwfile, 'wd', dwfile, ...
-        't_basal', 0.05, 't_apicaltuft', 0.05, 'alpha_context', 400, 'alpha_driver', 400, 'apical_multiplier', 1.0, 'wi', '', ...
-         'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.012, ...
+        't_basal', 0.05, 't_apicaltuft', 0.05, 'alpha_context', 400, 'alpha_driver', 400, 'apical_multiplier', apicalmultiplier, 'wi', '', ...
+         'snumbersout', outfilename, 'transferfunction', tf, 'p_refractory_period', 0.012, 'tf2_k2', tf2_k2, ...
      'logisticGradientBasal',   logisticGradientBasal,  'logisticGradientTuft', logisticGradientTuft, ... 
      'logisticInterceptBasal', logisticInterceptBasal, 'logisticInterceptTuft', logisticInterceptTuft ...
      ) ;
